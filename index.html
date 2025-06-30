@@ -132,6 +132,11 @@
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
+        if (!window.Telegram || !window.Telegram.WebApp || !Telegram.WebApp.initData) {
+            alert("⚠️ WebApp API не ініціалізовано! Можливо, відкрив через браузер?");
+        } else {
+            alert("✅ WebApp API активний");
+        }
 
         function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
