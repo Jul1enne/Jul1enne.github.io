@@ -150,6 +150,7 @@
                 tag: document.getElementById('tag').value,
             };
             tg.sendData(JSON.stringify(data));
+            setTimeout(() => tg.close(), 100);
         }
 
         function sendEpisode() {
@@ -162,6 +163,7 @@
                 description: document.getElementById('description').value,
             };
             tg.sendData(JSON.stringify(data));
+            setTimeout(() => tg.close(), 100);
         }
     </script>
 </body>
