@@ -149,6 +149,7 @@
                 sound: document.getElementById('sound').value,
                 tag: document.getElementById('tag').value,
             };
+            console.log("SEND:", data);
             tg.sendData(JSON.stringify(data));
             setTimeout(() => tg.close(), 100);
         }
@@ -162,6 +163,7 @@
                 voiced_by: document.getElementById('voiced_by').value,
                 description: document.getElementById('description').value,
             };
+            console.log("SEND:", data);
             tg.sendData(JSON.stringify(data));
             setTimeout(() => tg.close(), 100);
         }
