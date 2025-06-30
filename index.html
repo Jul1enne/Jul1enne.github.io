@@ -133,6 +133,9 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
+        Telegram.WebApp.sendData(JSON.stringify({type: "test"}));
+        alert("відправлено")
+
         function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.form').forEach(el => el.style.display = 'none');
@@ -149,9 +152,7 @@
                 sound: document.getElementById('sound').value,
                 tag: document.getElementById('tag').value,
             };
-            alert("tg.initData: " + tg.initData);
-            alert("tg.initDataUnsafe: " + JSON.stringify(tg.initDataUnsafe));
-            alert("tg.initDataUnsafe: " + JSON.stringify(data));
+
             tg.sendData(JSON.stringify(data));
 
         }
@@ -165,8 +166,7 @@
                 voiced_by: document.getElementById('voiced_by').value,
                 description: document.getElementById('description').value,
             };
-            alert("tg.initData: " + tg.initData);
-            alert("tg.initDataUnsafe: " + JSON.stringify(tg.initDataUnsafe));;
+
             tg.sendData(JSON.stringify(data));
             setTimeout(() => tg.close(), 100);
         }
