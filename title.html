@@ -78,7 +78,7 @@
             flex: 1;
         }
         .row .form-group.season {
-            flex: 0.8;
+            flex: 1;
         }
         .submit-button {
             margin-top: auto;
@@ -110,29 +110,35 @@
 
         <div class="form-container">
             <div id="add_title" class="form">
+                <div class="section-title">Параметри аніме</div>
                 <div class="form-group"><input id="title_name" placeholder="Назва"></div>
-                <div class="form-group"><input id="season" type="number" placeholder="Сезон"></div>
-                <div class="form-group"><input id="episodes_count" type="number" placeholder="Скільки серій в сезоні"></div>
+                <div class="row">
+                    <div class="form-group"><input id="season" type="number" placeholder="Сезон"></div>
+                    <div class="form-group"><input id="episodes_count" type="number" placeholder="Скільки серій в сезоні"></div>
+                </div>
+                <div class="section-title">Додатково</div>
                 <div class="form-group"><input id="sound" placeholder="Робота зі звуком"></div>
-                <div class="form-group"><input id="tag" placeholder="Тег (#назва_аніме)"></div>
+                <div class="form-group"><input id="tag" placeholder="Тег"></div>
                 <div class="submit-button">
                     <button onclick="sendTitle()">Відправити</button>
                 </div>
             </div>
 
             <div id="add_season" class="form" style="display:none">
+                <div class="section-title">Аніме</div>
+                <div class="form-group">
+                    <select id="anime_list">
+                        <option value=""></option>
+                        <!-- Додати динамічні опції через JS -->
+                    </select>
+                </div>
                 <div class="row">
-                    <div class="form-group">
-                        <select id="anime_list">
-                            <option value="">Оберіть аніме</option>
-                            <!-- Додати динамічні опції через JS -->
-                        </select>
-                    </div>
                     <div class="form-group season">
                         <input id="season_number" type="number" placeholder="Сезон">
                     </div>
+                    <div class="form-group"><input id="episodes_count" type="number" placeholder="Скільки серій в сезоні"></div>
                 </div>
-                <div class="form-group"><input id="episodes_count" type="number" placeholder="Скільки серій в сезоні"></div>
+                <div class="section-title">Опис</div>
                 <div class="form-group"><input id="sound" placeholder="Робота зі звуком"></div>
                 <div class="submit-button">
                     <button onclick="sendSeasone()">Відправити</button>
