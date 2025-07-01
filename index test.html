@@ -155,7 +155,7 @@
 
         function sendTitle() {
             const data = {
-                type: 'add_title',
+                user_id: tg.initDataUnsafe?.user?.id, // <-- дуже важливо
                 name: document.getElementById('title_name')?.value,
                 season: document.getElementById('season')?.value || document.getElementById('season_number')?.value,
                 episodes_count: document.getElementById('episodes_count').value,
@@ -163,7 +163,23 @@
                 tag: document.getElementById('tag').value,
                 anime_list: document.getElementById('anime_list')?.value,
             };
-            tg.sendData(JSON.stringify(data));
+        
+            fetch("http://localhost:8000/submit_title", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(response => {
+                alert("Успішно відправлено!");
+                tg.close(); // Закрити WebApp
+            })
+            .catch(error => {
+                alert("Помилка при надсиланні!");
+                console.error(error);
+            });
         }
 
         fetch("http://localhost:8000/anime")
