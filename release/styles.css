@@ -118,9 +118,11 @@ button {
 }
 .switch-label {
     padding-top: 14px;
+    padding-left: 7%;
+
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 7%;
     font-size: 18px;
 }
 
