@@ -120,7 +120,7 @@ button {
     padding-top: 14px;
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 25px;
     font-size: 18px;
 }
 
@@ -129,10 +129,12 @@ button {
 }
 
 .switch {
+    margin-left: 2%;
     position: relative;
     display: inline-block;
     width: 48px;
     height: 28px;
+    flex-shrink: 0;
 }
 
 .switch input {
