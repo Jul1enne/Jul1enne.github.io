@@ -9,17 +9,22 @@ function switchTab(tab) {
     document.getElementById(tab).style.display = 'flex';
 }
 
+
+
 function sendEpisode() {
+    const voicers = Array.from(document.querySelectorAll('input[name="voicers"]:checked')).map(cb => cb.value);
+    
     const data = {
         type: 'episode',
         user_id: tg.initDataUnsafe?.user?.id,
-        name: document.getElementById('anime_list')?.textContent,
+        name: document.getElementById('anime_list')?.value,
         episode: document.getElementById('episode_num').value,
         episode_title: document.getElementById('episode_title').value,
-        voiced_by: document.getElementById('voiced_by').value,
+        voiced_by: voicers,
         description: document.getElementById('description').value,
         include_sound: document.getElementById('include_sound_switch')?.checked ?? false
     };
+    
     fetch("http://localhost:8000/submit_episode", {
         method: "POST",
         headers: {
@@ -37,6 +42,29 @@ function sendEpisode() {
         console.error(error);
     });
 }
+
+fetch("http://localhost:8000/voicers")
+  .then(res => res.json())
+  .then(voicers => {
+    const voicedContainer = document.getElementById("voiced_by_container");
+
+    voicers.forEach(voicer => {
+        const name = typeof voicer === "string" ? voicer : voicer.name; // на випадок, якщо це обʼєкт
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "switch-wrapper";
+        wrapper.innerHTML = `
+            <label class="switch-label">
+                <label class="switch">
+                    <input type="checkbox" name="voicers" value="${name}">
+                    <span class="slider"></span>
+                </label>
+                ${name}
+            </label>
+    `;
+    voicedContainer.appendChild(wrapper);
+});
+  });
 
 fetch("http://localhost:8000/anime")
     .then(res => res.json())

@@ -84,7 +84,14 @@ textarea {
 
 .section-title {
     margin: 24px 0 12px;
+    ;
     font-weight: bold;
+    font-size: 18px;
+}
+
+.sub-section-title {
+    text-align: center;
+    margin: 12px 0 12px;
     font-size: 18px;
 }
 
@@ -113,7 +120,7 @@ button {
     padding: 14px;
     background-color: #3a3a3c;
     border-radius: 10px;
-    color: white;
+    color: #cccccc70;
     font-size: 18px;
 }
 .switch-label {
@@ -148,7 +155,7 @@ button {
     cursor: pointer;
     top: 0; left: 0;
     right: 0; bottom: 0;
-    background-color: #ccc;
+    background-color: #cccccc70;
     transition: 0.4s;
     border-radius: 34px;
 }
