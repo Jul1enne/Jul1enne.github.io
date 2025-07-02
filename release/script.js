@@ -18,6 +18,7 @@ function sendEpisode() {
         type: 'episode',
         user_id: tg.initDataUnsafe?.user?.id,
         name: document.getElementById('anime_list')?.value,
+        season: document.getElementById('season_list').value,
         episode: document.getElementById('episode_num').value,
         episode_title: document.getElementById('episode_title').value,
         voiced_by: voicers,
@@ -66,13 +67,35 @@ fetch("http://localhost:8000/voicers")
 });
   });
 
+let animeData = [];
+
 fetch("http://localhost:8000/anime")
     .then(res => res.json())
-    .then(animeList => {
-      animeList.forEach(anime => {
-        const option = document.createElement("option");
-        option.value = anime.tag;
-        option.textContent = anime.name;
-        document.getElementById("anime_list").appendChild(option);
-      });
+    .then(data => {
+        animeData = data;
+
+        const animeSelect = document.getElementById("anime_list");
+        data.forEach(anime => {
+            const option = document.createElement("option");
+            option.value = anime.tag;
+            option.textContent = anime.name;
+            animeSelect.appendChild(option);
+        });
+
+        animeSelect.addEventListener("change", () => {
+            const selectedTag = animeSelect.value;
+            const selectedAnime = animeData.find(a => a.tag === selectedTag);
+
+            const seasonSelect = document.getElementById("season_list");
+            seasonSelect.innerHTML = ""; // Очистити список сезонів
+
+            if (!selectedAnime || !selectedAnime.seasons) return;
+
+            for (let i = 1; i <= selectedAnime.seasons; i++) {
+                const opt = document.createElement("option");
+                opt.value = i;
+                opt.textContent = `Сезон ${i}`;
+                seasonSelect.appendChild(opt);
+            }
+        });
     });
