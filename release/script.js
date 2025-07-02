@@ -35,12 +35,23 @@ function sendEpisode() {
     })
     .then(res => res.json())
     .then(response => {
-        //alert("Успішно відправлено!");
-        tg.close(); // Закрити WebApp
-    })
-    .catch(error => {
-        alert("Помилка при надсиланні!");
-        console.error(error);
+        if (response.status === "anime exist") {
+            alert("Це аніме вже існує!");
+            return;
+        }
+
+        if (response.status === "anime added") {
+            alert("Успішно надіслано!");
+            tg.close();
+            return;
+        }
+
+        // Будь-який інший статус
+        alert("Щось пішло не так!");
+        })
+        .catch(error => {
+            alert("Помилка при надсиланні!");
+            console.error(error);
     });
 }
 
