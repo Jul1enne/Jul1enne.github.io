@@ -9,13 +9,6 @@ function switchTab(tab) {
     document.getElementById(tab).style.display = 'flex';
 }
 
-let toggleState = false;
-
-document.getElementById("toggle_sound").addEventListener("click", () => {
-    toggleState = !toggleState;
-    document.getElementById("toggle_sound").textContent = toggleState ? "Так" : "Ні";
-});
-
 function sendEpisode() {
     const data = {
         type: 'episode',
@@ -24,9 +17,33 @@ function sendEpisode() {
         episode_title: document.getElementById('episode_title').value,
         voiced_by: document.getElementById('voiced_by').value,
         description: document.getElementById('description').value,
-        include_sound_3: document.getElementById('include_sound_switch')?.checked ?? false,
+        include_sound: document.getElementById('include_sound')?.checked ?? false
     };
-
-    console.log(data); // тимчасово
-    tg.sendData(JSON.stringify(data));
+    fetch("http://localhost:8000/submit_episode", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(response => {
+        alert("Успішно відправлено!");
+        tg.close(); // Закрити WebApp
+    })
+    .catch(error => {
+        alert("Помилка при надсиланні!");
+        console.error(error);
+    });
 }
+
+fetch("http://localhost:8000/anime")
+    .then(res => res.json())
+    .then(animeList => {
+      animeList.forEach(anime => {
+        const option = document.createElement("option");
+        option.value = anime.tag;
+        option.textContent = anime.name;
+        document.getElementById("anime_list").appendChild(option);
+      });
+    });
