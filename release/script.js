@@ -2,6 +2,8 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
 
+alert("Успішно відправлено!" + tg.initDataUnsafe?.user?.id);
+
 function switchTab(tab) {
     document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.form').forEach(el => el.style.display = 'none');
