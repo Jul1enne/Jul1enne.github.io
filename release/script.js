@@ -2,8 +2,6 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-alert("Успішно відправлено!" + tg.initDataUnsafe?.user?.id);
-
 function switchTab(tab) {
     document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.form').forEach(el => el.style.display = 'none');
@@ -15,7 +13,7 @@ function sendEpisode() {
     const data = {
         type: 'episode',
         user_id: tg.initDataUnsafe?.user?.id,
-        name: document.getElementById('anime_list')?.value,
+        name: document.getElementById('anime_list')?.textContent,
         episode: document.getElementById('episode_num').value,
         episode_title: document.getElementById('episode_title').value,
         voiced_by: document.getElementById('voiced_by').value,
@@ -31,7 +29,7 @@ function sendEpisode() {
     })
     .then(res => res.json())
     .then(response => {
-        alert("Успішно відправлено!");
+        //alert("Успішно відправлено!");
         tg.close(); // Закрити WebApp
     })
     .catch(error => {
