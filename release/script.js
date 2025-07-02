@@ -12,8 +12,9 @@ function switchTab(tab) {
 function sendEpisode() {
     const data = {
         type: 'episode',
+        user_id: tg.initDataUnsafe?.user?.id,
         name: document.getElementById('anime_list')?.value,
-        episode_num: document.getElementById('episode_num').value,
+        episode: document.getElementById('episode_num').value,
         episode_title: document.getElementById('episode_title').value,
         voiced_by: document.getElementById('voiced_by').value,
         description: document.getElementById('description').value,
