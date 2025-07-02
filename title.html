@@ -161,7 +161,7 @@
         function sendTitle() {
             const data = {
                 user_id: tg.initDataUnsafe?.user?.id, // <-- дуже важливо
-                name: document.getElementById('title_name')?.textContent,
+                name: document.getElementById('title_name')?.value,
                 season: document.getElementById('season')?.value || document.getElementById('season_number')?.value,
                 episodes_count: document.getElementById('episodes_count').value,
                 sound: document.getElementById('sound').value,
