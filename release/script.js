@@ -100,13 +100,13 @@ fetch("http://localhost:8000/anime")
             const seasonSelect = document.getElementById("season_list");
             seasonSelect.innerHTML = ""; // Очистити список сезонів
 
-            if (!selectedAnime || !selectedAnime.seasons) return;
+             if (!selectedAnime || !selectedAnime.seasons) return;
 
-            for (let i = 1; i <= selectedAnime.seasons; i++) {
+            selectedAnime.seasons.forEach(season => {
                 const opt = document.createElement("option");
-                opt.value = i;
-                opt.textContent = `Сезон ${i}`;
+                opt.value = season;
+                opt.textContent = `Сезон ${season}`;
                 seasonSelect.appendChild(opt);
-            }
+            });
         });
     });
