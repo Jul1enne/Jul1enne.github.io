@@ -209,15 +209,25 @@
 
     // Отримання списку аніме
     fetch("http://localhost:8000/anime")
-      .then(res => res.json())
-      .then(animeList => {
-        animeList.forEach(anime => {
-          const option = document.createElement("option");
-          option.value = anime.tag;
-          option.textContent = anime.name;
-          document.getElementById("season_anime_list").appendChild(option);
+        .then(res => res.json())
+        .then(data => {
+            const animeSelect = document.getElementById("season_anime_list");
+            animeSelect.innerHTML = "";
+        
+            data.forEach(anime => {
+                const group = document.createElement("optgroup");
+                group.label = anime.name;
+
+                anime.seasons.forEach(season => {
+                    const option = document.createElement("option");
+                    option.value = `${anime.tag}_${season}`;
+                    option.textContent = `Сезон ${season}`;
+                    group.appendChild(option);
+                });
+            
+                animeSelect.appendChild(group);
+            });
         });
-      });
   </script>
 </body>
 </html>
