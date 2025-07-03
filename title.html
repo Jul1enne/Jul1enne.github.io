@@ -192,7 +192,7 @@
                 season: document.getElementById('season')?.value || document.getElementById('season_number')?.value,
                 episodes_count: document.getElementById('episodes_count').value,
                 sound: document.getElementById('sound').value,
-                tag: document.getElementById('anime_list')?.textContent,
+                tag: document.getElementById('anime_list')?.value,
             };
         
             fetch("http://localhost:8000/submit_seasone", {
@@ -204,7 +204,6 @@
             })
             .then(res => res.json())
             .then(response => {
-                alert("Успішно відправлено!");
                 tg.close(); // Закрити WebApp
             })
             .catch(error => {
