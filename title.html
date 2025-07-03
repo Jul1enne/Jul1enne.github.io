@@ -192,7 +192,7 @@
             <div class="form-group setting-3">
                 <label class="switch-label">
                     <label class="switch">
-                        <input type="checkbox" id="include_season_num" checked>
+                        <input type="checkbox" id="title_include_season_num" checked>
                         <span class="slider"></span>
                     </label>
                     Додати номер сезону до назви
@@ -231,7 +231,7 @@
             <div class="form-group setting-3">
                 <label class="switch-label">
                     <label class="switch">
-                        <input type="checkbox" id="include_season_num" checked>
+                        <input type="checkbox" id="season_include_season_num" checked>
                         <span class="slider"></span>
                     </label>
                     Додати номер сезону до назви
@@ -264,7 +264,7 @@
         season: document.getElementById('title_season')?.value,
         episodes_count: document.getElementById('title_episodes_count')?.value,
         sound: document.getElementById('title_sound')?.value,
-        include_season_num: document.getElementById('include_season_num')?.checked ?? false,
+        include_season_num: document.getElementById('title_include_season_num')?.checked ?? true,
         tag: document.getElementById('title_tag')?.value,
       };
 
@@ -289,6 +289,7 @@
         season: document.getElementById('season_number')?.value,
         episodes_count: document.getElementById('season_episodes_count')?.value,
         sound: document.getElementById('season_sound')?.value,
+        include_season_num: document.getElementById('season_include_season_num')?.checked ?? true,
         tag: select?.value,
       };
 
