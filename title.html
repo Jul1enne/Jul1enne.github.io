@@ -1,227 +1,223 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anime Form</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            background-color: #1e1e1e;
-            color: white;
-            font-family: Arial, sans-serif;
-            font-size: 18px;
-        }
-        .wrapper {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        .tabs {
-            display: flex;
-        }
-        .tab {
-            flex: 1;
-            text-align: center;
-            padding: 14px;
-            cursor: pointer;
-            background-color: #1e1e1e;
-            color: white;
-            border-radius: 10px 10px 0 0;
-            font-weight: bold;
-            font-size: 20px;
-        }
-        .tab.active {
-            background-color: #2c2c2e;
-        }
-        .form-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background-color: #2c2c2e;
-        }
-        .form {
-            flex: 1;
-            padding: 24px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
-        .form-group {
-            margin-bottom: 18px;
-        }
-        input, textarea, select {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            background-color: #3a3a3c;
-            color: white;
-            box-sizing: border-box;
-            font-size: 18px;
-        }
-        textarea {
-            resize: none;
-            overflow-y: auto;
-            min-height: 500px;
-        }
-        .row {
-            display: flex;
-            gap: 12px;
-        }
-        .row .form-group {
-            flex: 1;
-        }
-        .row .form-group.season {
-            flex: 1;
-        }
-        .submit-button {
-            margin-top: auto;
-            padding-top: 12px;
-        }
-        button {
-            background-color: #0a84ff;
-            color: white;
-            border: none;
-            padding: 16px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 18px;
-        }
-        .section-title {
-            margin: 24px 0 12px;
-            font-weight: bold;
-            font-size: 18px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anime Form</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: #1e1e1e;
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+    }
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .tabs {
+      display: flex;
+    }
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 14px;
+      cursor: pointer;
+      background-color: #1e1e1e;
+      color: white;
+      border-radius: 10px 10px 0 0;
+      font-weight: bold;
+      font-size: 20px;
+    }
+    .tab.active {
+      background-color: #2c2c2e;
+    }
+    .form-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: #2c2c2e;
+    }
+    .form {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background-color: #3a3a3c;
+      color: white;
+      box-sizing: border-box;
+      font-size: 18px;
+    }
+    textarea {
+      resize: none;
+      overflow-y: auto;
+      min-height: 500px;
+    }
+    .row {
+      display: flex;
+      gap: 12px;
+    }
+    .row .form-group {
+      flex: 1;
+    }
+    .submit-button {
+      margin-top: auto;
+      padding-top: 12px;
+    }
+    button {
+      background-color: #0a84ff;
+      color: white;
+      border: none;
+      padding: 16px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 18px;
+    }
+    .section-title {
+      margin: 24px 0 12px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+  </style>
 </head>
 <body>
-    <div class="wrapper">
-        <div class="tabs">
-            <div class="tab active" onclick="switchTab('add_title')">Додати тайтл</div>
-            <div class="tab" onclick="switchTab('add_season')">Додати сезон</div>
-        </div>
-
-        <div class="form-container">
-            <div id="add_title" class="form">
-                <div class="section-title">Параметри аніме</div>
-                <div class="form-group"><input id="title_name" placeholder="Назва"></div>
-                <div class="row">
-                    <div class="form-group"><input id="season" type="number" placeholder="Сезон"></div>
-                    <div class="form-group"><input id="episodes_count" type="number" placeholder="Скільки серій в сезоні"></div>
-                </div>
-                <div class="section-title">Додатково</div>
-                <div class="form-group"><input id="sound" placeholder="Робота зі звуком"></div>
-                <div class="form-group"><input id="tag" placeholder="Тег"></div>
-                <div class="submit-button">
-                    <button onclick="sendTitle()">Відправити</button>
-                </div>
-            </div>
-
-            <div id="add_season" class="form" style="display:none">
-                <div class="section-title">Аніме</div>
-                <div class="form-group">
-                    <select id="anime_list">
-                        <option value=""></option>
-                        <!-- Додати динамічні опції через JS -->
-                    </select>
-                </div>
-                <div class="row">
-                    <div class="form-group season">
-                        <input id="season_number" type="number" placeholder="Сезон">
-                    </div>
-                    <div class="form-group"><input id="episodes_count" type="number" placeholder="Скільки серій в сезоні"></div>
-                </div>
-                <div class="section-title">Опис</div>
-                <div class="form-group"><input id="sound" placeholder="Робота зі звуком"></div>
-                <div class="submit-button">
-                    <button onclick="sendSeasone()">Відправити</button>
-                </div>
-            </div>
-        </div>
+  <div class="wrapper">
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('add_title')">Додати тайтл</div>
+      <div class="tab" onclick="switchTab('add_season')">Додати сезон</div>
     </div>
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
+    <div class="form-container">
+      <!-- ТАБ: Додати тайтл -->
+      <div id="add_title" class="form">
+        <div class="section-title">Параметри аніме</div>
+        <div class="form-group"><input id="title_name" placeholder="Назва"></div>
+        <div class="row">
+          <div class="form-group"><input id="title_season" type="number" placeholder="Сезон"></div>
+          <div class="form-group"><input id="title_episodes_count" type="number" placeholder="Скільки серій в сезоні"></div>
+        </div>
+        <div class="section-title">Додатково</div>
+        <div class="form-group"><input id="title_sound" placeholder="Робота зі звуком"></div>
+        <div class="form-group"><input id="title_tag" placeholder="Тег"></div>
+        <div class="submit-button">
+          <button onclick="sendTitle()">Відправити</button>
+        </div>
+      </div>
 
-        function switchTab(tab) {
-            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.form').forEach(el => el.style.display = 'none');
-            document.querySelector('.tab[onclick*="' + tab + '"]').classList.add('active');
-            document.getElementById(tab).style.display = 'flex';
-        }
+      <!-- ТАБ: Додати сезон -->
+      <div id="add_season" class="form" style="display:none">
+        <div class="section-title">Аніме</div>
+        <div class="form-group">
+          <select id="season_anime_list">
+            <option value=""></option>
+          </select>
+        </div>
+        <div class="row">
+          <div class="form-group">
+            <input id="season_number" type="number" placeholder="Сезон">
+          </div>
+          <div class="form-group">
+            <input id="season_episodes_count" type="number" placeholder="Скільки серій в сезоні">
+          </div>
+        </div>
+        <div class="section-title">Опис</div>
+        <div class="form-group">
+          <input id="season_sound" placeholder="Робота зі звуком">
+        </div>
+        <div class="submit-button">
+          <button onclick="sendSeasone()">Відправити</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        function sendTitle() {
-            const data = {
-                user_id: tg.initDataUnsafe?.user?.id, // <-- дуже важливо
-                name: document.getElementById('title_name')?.value,
-                season: document.getElementById('season')?.value || document.getElementById('season_number')?.value,
-                episodes_count: document.getElementById('episodes_count').value,
-                sound: document.getElementById('sound').value,
-                tag: document.getElementById('tag').value,
-            };
-        
-            fetch("http://localhost:8000/submit_title", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            })
-            .then(res => res.json())
-            .then(response => {
-                tg.close(); // Закрити WebApp
-            })
-            .catch(error => {
-                alert("Помилка при надсиланні!");
-                console.error(error);
-            });
-        }
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
 
-        function sendSeasone() {
-            const data = {
-                user_id: tg.initDataUnsafe?.user?.id, // <-- дуже важливо
-                name: document.getElementById('anime_list').selectedOptions[0].textContent,
-                season: document.getElementById('season')?.value || document.getElementById('season_number')?.value,
-                episodes_count: document.getElementById('episodes_count').value,
-                sound: document.getElementById('sound').value,
-                tag: document.getElementById('anime_list')?.value,
-            };
-        
-            fetch("http://localhost:8000/submit_seasone", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            })
-            .then(res => res.json())
-            .then(response => {
-                tg.close(); // Закрити WebApp
-            })
-            .catch(error => {
-                alert("Помилка при надсиланні!");
-                console.error(error);
-            });
-        }
+    function switchTab(tab) {
+      document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.form').forEach(el => el.style.display = 'none');
+      document.querySelector(`.tab[onclick*="${tab}"]`).classList.add('active');
+      document.getElementById(tab).style.display = 'flex';
+    }
 
-        fetch("http://localhost:8000/anime")
-            .then(res => res.json())
-            .then(animeList => {
-              animeList.forEach(anime => {
-                const option = document.createElement("option");
-                option.value = anime.tag;
-                option.textContent = anime.name;
-                document.getElementById("anime_list").appendChild(option);
-              });
-            });
-    </script>
+    function sendTitle() {
+      const data = {
+        user_id: tg.initDataUnsafe?.user?.id,
+        name: document.getElementById('title_name')?.value,
+        season: document.getElementById('title_season')?.value,
+        episodes_count: document.getElementById('title_episodes_count')?.value,
+        sound: document.getElementById('title_sound')?.value,
+        tag: document.getElementById('title_tag')?.value,
+      };
+
+      fetch("http://localhost:8000/submit_title", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(response => tg.close())
+      .catch(error => {
+        alert("Помилка при надсиланні!");
+        console.error(error);
+      });
+    }
+
+    function sendSeasone() {
+      const select = document.getElementById('season_anime_list');
+      const data = {
+        user_id: tg.initDataUnsafe?.user?.id,
+        name: select.selectedOptions[0].textContent,
+        season: document.getElementById('season_number')?.value,
+        episodes_count: document.getElementById('season_episodes_count')?.value,
+        sound: document.getElementById('season_sound')?.value,
+        tag: select?.value,
+      };
+
+      fetch("http://localhost:8000/submit_seasone", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(response => tg.close())
+      .catch(error => {
+        alert("Помилка при надсиланні!");
+        console.error(error);
+      });
+    }
+
+    // Отримання списку аніме
+    fetch("http://localhost:8000/anime")
+      .then(res => res.json())
+      .then(animeList => {
+        animeList.forEach(anime => {
+          const option = document.createElement("option");
+          option.value = anime.tag;
+          option.textContent = anime.name;
+          document.getElementById("season_anime_list").appendChild(option);
+        });
+      });
+  </script>
 </body>
 </html>
