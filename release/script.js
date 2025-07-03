@@ -37,12 +37,11 @@ function sendEpisode() {
     .then(res => res.json())
     .then(response => {
         if (response.status === "anime exist") {
-            alert("Це аніме вже існує!");
+            alert("Серія цього аніме вже існує!");
             return;
         }
 
         if (response.status === "anime added") {
-            alert("Успішно надіслано!");
             tg.close();
             return;
         }
