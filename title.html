@@ -188,7 +188,7 @@
         function sendSeasone() {
             const data = {
                 user_id: tg.initDataUnsafe?.user?.id, // <-- дуже важливо
-                name: document.getElementById('anime_list')?.textContent,
+                name: document.getElementById('anime_list').selectedOptions[0].textContent,
                 season: document.getElementById('season')?.value || document.getElementById('season_number')?.value,
                 episodes_count: document.getElementById('episodes_count').value,
                 sound: document.getElementById('sound').value,
