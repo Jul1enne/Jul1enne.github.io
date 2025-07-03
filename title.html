@@ -96,6 +96,75 @@
       font-weight: bold;
       font-size: 18px;
     }
+
+
+
+    .input-like-box {
+        margin-top: 12px;
+        margin-bottom: 20px;
+        padding: 14px;
+        background-color: #3a3a3c;
+        border-radius: 10px;
+        color: #cccccc70;
+        font-size: 18px;
+    }
+    .switch-label {
+        padding-top: 14px;
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        font-size: 18px;
+    }
+
+    .switch-text {
+        color: white;
+    }
+
+    .switch {
+        margin-left: 2%;
+        position: relative;
+        display: inline-block;
+        width: 48px;
+        height: 28px;
+        flex-shrink: 0;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0; left: 0;
+        right: 0; bottom: 0;
+        background-color: #cccccc70;
+        transition: 0.4s;
+        border-radius: 34px;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: 4px;
+        bottom: 4px;
+        background-color: #3a3a3c;
+        transition: 0.4s;
+        border-radius: 50%;
+    }
+
+    .switch input:checked + .slider {
+        background-color: #0a84ff;
+    }
+
+    .switch input:checked + .slider:before {
+        transform: translateX(20px);
+    }
+
   </style>
 </head>
 <body>
@@ -117,6 +186,20 @@
         <div class="section-title">Додатково</div>
         <div class="form-group"><input id="title_sound" placeholder="Робота зі звуком"></div>
         <div class="form-group"><input id="title_tag" placeholder="Тег"></div>
+        
+        <div class="section-title" s>Налаштування</div>
+        <div class="input-like-box">
+            <div class="form-group setting-3">
+                <label class="switch-label">
+                    <label class="switch">
+                        <input type="checkbox" id="include_season_num" checked>
+                        <span class="slider"></span>
+                    </label>
+                    Додати номер сезону до назви
+                </label>
+            </div>
+        </div>
+
         <div class="submit-button">
           <button onclick="sendTitle()">Відправити</button>
         </div>
@@ -142,6 +225,20 @@
         <div class="form-group">
           <input id="season_sound" placeholder="Робота зі звуком">
         </div>
+
+        <div class="section-title" s>Налаштування</div>
+        <div class="input-like-box">
+            <div class="form-group setting-3">
+                <label class="switch-label">
+                    <label class="switch">
+                        <input type="checkbox" id="include_season_num" checked>
+                        <span class="slider"></span>
+                    </label>
+                    Додати номер сезону до назви
+                </label>
+            </div>
+        </div>
+
         <div class="submit-button">
           <button onclick="sendSeasone()">Відправити</button>
         </div>
@@ -167,6 +264,7 @@
         season: document.getElementById('title_season')?.value,
         episodes_count: document.getElementById('title_episodes_count')?.value,
         sound: document.getElementById('title_sound')?.value,
+        include_season_num: document.getElementById('include_season_num')?.checked ?? false,
         tag: document.getElementById('title_tag')?.value,
       };
 

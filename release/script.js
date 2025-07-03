@@ -23,7 +23,8 @@ function sendEpisode() {
         episode_title: document.getElementById('episode_title').value,
         voiced_by: voicers,
         description: document.getElementById('description').value,
-        include_sound: document.getElementById('include_sound_switch')?.checked ?? false
+        include_sound: document.getElementById('include_sound_switch')?.checked ?? false,
+        tag: document.getElementById('anime_list')?.value,
     };
     
     fetch("http://localhost:8000/submit_episode", {
