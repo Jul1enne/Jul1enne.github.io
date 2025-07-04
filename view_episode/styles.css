@@ -1,0 +1,32 @@
+body {
+  background-color: #1e1e1e;
+  color: white;
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  padding: 20px;
+}
+
+.episode-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.episode-item {
+  background-color: #333;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.episode-item h3 {
+  margin: 0 0 6px;
+}
+
+.episode-item a {
+  color: #4faaff;
+  text-decoration: none;
+}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Серії Аніме</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h2>Серії</h2>
+    <div id="episode-list" class="episode-list">
+      <div class="episode-item">
+        <h3>Назва серії: Тестова</h3>
+        <p>Серія 1 — Тестова серія для перевірки WebApp</p>
+        <a href="https://t.me/Test_UV_Release/63" target="_blank">🔗 Переглянути</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+  </script>
+</body>
+</html>
