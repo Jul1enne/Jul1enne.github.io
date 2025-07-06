@@ -86,6 +86,31 @@
     .dropdown.open .dropdown-content {
       display: flex;
     }
+
+
+    .fullscreen-video {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 9999;
+        background-color: black;
+    }
+    .fullscreen-toggle {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        z-index: 10000;
+        background: rgba(0,0,0,0.5);
+        border: none;
+        color: white;
+        font-size: 20px;
+        border-radius: 6px;
+        padding: 6px 10px;
+        cursor: pointer;
+    }
+
   </style>
 </head>
 <body>
@@ -94,10 +119,11 @@
     <div class="description" id="animeDescription">Завантаження опису...</div>
 
     <div class="video-container">
-      <video id="animePlayer" controls autoplay>
-        <source id="videoSource" src="" type="video/mp4" />
-        Ваш браузер не підтримує відео.
-      </video>
+        <video id="animePlayer" controls autoplay>
+            <source id="videoSource" src="" type="video/mp4" />
+            Ваш браузер не підтримує відео.
+        </video>
+        <button class="fullscreen-toggle" onclick="toggleFullscreen()">⛶</button>
     </div>
 
     <!-- Список сезонів -->
@@ -120,6 +146,23 @@
   <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
+
+    let isFullscreen = false;
+
+    function toggleFullscreen() {
+        const videoContainer = document.querySelector('.video-container');
+        const btn = document.querySelector('.fullscreen-toggle');
+        
+        if (isFullscreen) {
+            videoContainer.classList.remove('fullscreen-video');
+            btn.textContent = '⛶';
+        } else {
+            videoContainer.classList.add('fullscreen-video');
+            btn.textContent = '⛌';
+        }
+      
+        isFullscreen = !isFullscreen;
+    }
 
     // Симуляція отриманих даних з API
     const animeData = {
