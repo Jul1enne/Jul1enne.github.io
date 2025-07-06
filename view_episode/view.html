@@ -94,7 +94,7 @@
     <div class="description" id="animeDescription">Завантаження опису...</div>
 
     <div class="video-container">
-      <video id="animePlayer" controls autoplay>
+      <video id="animePlayer" playsinline webkit-playsinline controls>
         <source id="videoSource" src="" type="video/mp4" />
         Ваш браузер не підтримує відео.
       </video>
@@ -121,7 +121,14 @@
     const tg = window.Telegram.WebApp;
     tg.expand();
 
-    
+    document.getElementById("animePlayer").addEventListener("click", () => {
+      const player = document.getElementById("animePlayer");
+      if (player.requestFullscreen) {
+        player.requestFullscreen().catch(() => {});
+      } else if (player.webkitEnterFullscreen) {
+        player.webkitEnterFullscreen(); // для Safari
+      }
+    });
 
     // Симуляція отриманих даних з API
     const animeData = {
