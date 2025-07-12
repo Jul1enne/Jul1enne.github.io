@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anime Player</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #1e1e1e;
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+    }
+
+    .wrapper {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 12px;
+      font-size: 26px;
+    }
+
+    .description {
+      background-color: #2c2c2e;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 16px;
+      line-height: 1.5;
+      color: #cccccc;
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 */
+      margin-bottom: 16px;
+    }
+
+    video {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      background-color: black;
+    }
+
+    .dropdown {
+      background-color: #2c2c2e;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .dropdown-header {
+      padding: 14px;
+      cursor: pointer;
+      font-weight: bold;
+      background-color: #3a3a3c;
+    }
+
+    .dropdown-content {
+      display: none;
+      flex-wrap: wrap;
+      padding: 10px;
+      gap: 8px;
+    }
+
+    .dropdown-content button {
+      background-color: #0a84ff;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .dropdown.open .dropdown-content {
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h1 id="animeTitle">Аніме Назва</h1>
+    <div class="description" id="animeDescription">Завантаження опису...</div>
+
+    <div class="video-container">
+      <video id="animePlayer" controls autoplay>
+        <source id="videoSource" src="" type="video/mp4" />
+        Ваш браузер не підтримує відео.
+      </video>
+    </div>
+
+    <!-- Список сезонів -->
+    <div class="dropdown" id="seasonsDropdown">
+      <div class="dropdown-header" onclick="toggleDropdown('seasonsDropdown')">Сезони</div>
+      <div class="dropdown-content" id="seasonList">
+        <!-- Динамічно заповнюється -->
+      </div>
+    </div>
+
+    <!-- Список серій -->
+    <div class="dropdown" id="episodesDropdown">
+      <div class="dropdown-header" onclick="toggleDropdown('episodesDropdown')">Серії</div>
+      <div class="dropdown-content" id="episodeList">
+        <!-- Динамічно заповнюється -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    // Симуляція отриманих даних з API
+    const animeData = {
+      title: "Дядечко з іншого світу",
+      description: "Ісекай-комедія про дядечка, який повернувся в реальний світ після 17 років у магічному королівстві.",
+      seasons: [
+        {
+          number: 1,
+          episodes: [
+            { title: "Серія 1", url: "https://Underground-Voice.b-cdn.net/Uncle-From-Another-World%20S01e01.mp4" },
+            { title: "Серія 2", url: "https://Underground-Voice.b-cdn.net/Uncle-From-Another-World%20S01e02.mp4" },
+            { title: "Серія 3", url: "https://Underground-Voice.b-cdn.net/Uncle-From-Another-World%20S01e03.mp4" },
+            { title: "Серія 10", url: "https://Underground-Voice.b-cdn.net/Uncle-From-Another-World%20S01e10.mp4" }
+          ]
+        },
+        {
+          number: 2,
+          episodes: [
+            { title: "Серія 1", url: "https://Underground-Voice.b-cdn.net/Uncle-From-Another-World%20S02e01.mp4" },
+            { title: "Серія 2", url: "https://Underground-Voice.b-cdn.net/Uncle-From-Another-World%20S02e02.mp4" }
+          ]
+        }
+      ]
+    };
+
+    let currentSeasonIndex = 0;
+
+    function loadAnime() {
+      document.getElementById("animeTitle").textContent = animeData.title;
+      document.getElementById("animeDescription").textContent = animeData.description;
+      loadSeasons();
+      loadEpisodes(0);
+      playEpisode(animeData.seasons[0].episodes[0].url);
+    }
+
+    function loadSeasons() {
+      const seasonList = document.getElementById("seasonList");
+      seasonList.innerHTML = "";
+      animeData.seasons.forEach((season, index) => {
+        const btn = document.createElement("button");
+        btn.textContent = `Сезон ${season.number}`;
+        btn.onclick = () => {
+          currentSeasonIndex = index;
+          loadEpisodes(index);
+          playEpisode(season.episodes[0].url);
+        };
+        seasonList.appendChild(btn);
+      });
+    }
+
+    function loadEpisodes(seasonIndex) {
+      const episodeList = document.getElementById("episodeList");
+      episodeList.innerHTML = "";
+      animeData.seasons[seasonIndex].episodes.forEach((episode, epIndex) => {
+        const btn = document.createElement("button");
+        btn.textContent = episode.title;
+        btn.onclick = () => {
+          playEpisode(episode.url);
+        };
+        episodeList.appendChild(btn);
+      });
+    }
+
+    function playEpisode(url) {
+      const player = document.getElementById("animePlayer");
+      const source = document.getElementById("videoSource");
+      source.src = url;
+      player.load();
+      player.play();
+    }
+
+    function toggleDropdown(id) {
+      const element = document.getElementById(id);
+      element.classList.toggle("open");
+    }
+
+    loadAnime();
+  </script>
+</body>
+</html>

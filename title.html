@@ -183,6 +183,12 @@
           <div class="form-group"><input id="title_season" type="number" placeholder="Сезон"></div>
           <div class="form-group"><input id="title_episodes_count" type="number" placeholder="Скільки серій в сезоні"></div>
         </div>
+
+        <div class="section-title">Опис аніме</div>
+        <div class="form-group"><input id="title_release_year" type="number" placeholder="Рік випуску аніме"></div>
+        <div class="form-group"><input id="title_ganre" placeholder="Жанр"></div>
+        <div class="form-group"><textarea id="title_description" placeholder="Опис"></textarea></div>
+
         <div class="section-title">Додатково</div>
         <div class="form-group"><input id="title_sound" placeholder="Робота зі звуком"></div>
         <div class="form-group"><input id="title_tag" placeholder="Тег"></div>
@@ -221,6 +227,12 @@
             <input id="season_episodes_count" type="number" placeholder="Скільки серій в сезоні">
           </div>
         </div>
+
+        <div class="section-title">Опис сезону</div>
+        <div class="form-group"><input id="season_release_year" type="number" placeholder="Рік випуску сезону"></div>
+        <div class="form-group"><input id="season_ganre" placeholder="Жанр"></div>
+        <div class="form-group"><textarea id="season-description" placeholder="Опис"></textarea></div>
+
         <div class="section-title">Опис</div>
         <div class="form-group">
           <input id="season_sound" placeholder="Робота зі звуком">
@@ -263,6 +275,11 @@
         name: document.getElementById('title_name')?.value,
         season: document.getElementById('title_season')?.value,
         episodes_count: document.getElementById('title_episodes_count')?.value,
+
+        release_year: document.getElementById('title_release_year')?.value,
+        ganre: document.getElementById('title_ganre')?.value,
+        description: document.getElementById('title_description')?.value,
+
         sound: document.getElementById('title_sound')?.value,
         include_season_num: document.getElementById('title_include_season_num')?.checked ?? true,
         tag: document.getElementById('title_tag')?.value,
@@ -288,6 +305,11 @@
         name: select.selectedOptions[0].textContent,
         season: document.getElementById('season_number')?.value,
         episodes_count: document.getElementById('season_episodes_count')?.value,
+
+        release_year: document.getElementById('season_release_year')?.value,
+        ganre: document.getElementById('season_ganre')?.value,
+        description: document.getElementById('season_description')?.value,
+
         sound: document.getElementById('season_sound')?.value,
         include_season_num: document.getElementById('season_include_season_num')?.checked ?? true,
         tag: select?.value,
