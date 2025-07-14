@@ -166,14 +166,15 @@ async function renderAnimePage(page) {
         <img src="http://localhost:8000/poster/${anime.file_id}" class="poster" alt="Poster">
         <div class="info">
           <div class="title">${anime.title}</div>
-          <div><strong>Жанр:</strong> ${currentSeason.genre}</div>
-          <div><strong>Кількість серій:</strong> ${currentSeason.episodes}</div>
-          <div><strong>Рік:</strong> ${currentSeason.year}</div>
+
+          <div class="description">${anime.description}</div>
         </div>
       </div>
       <div class="details" id="details-${anime.id}">
         <div class="meta" id="meta-${anime.id}">
-          <div class="description">${anime.description}</div>
+          <div><strong>Жанр:</strong> ${currentSeason.genre}</div>
+          <div><strong>Кількість серій:</strong> ${currentSeason.episodes}</div>
+          <div><strong>Рік:</strong> ${currentSeason.year}</div>
         </div>
         ${renderDetails()}
       </div>
