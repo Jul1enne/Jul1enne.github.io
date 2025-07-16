@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Аніме</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: #1e1e1e;
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+    }
+    .wrapper {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .back-btn {
+      display: block;
+      margin-bottom: 16px;
+      padding: 10px;
+      background-color: #588273;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 16px;
+      text-decoration: none;
+    }
+    .anime-item {
+      background-color: #2c2c2e;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .anime-summary {
+      display: flex;
+      padding: 12px;
+      align-items: flex-start;
+    }
+    .poster {
+      width: 25%;
+      max-width: 25%;
+      height: auto;
+      aspect-ratio: 2 / 3;
+      border-radius: 10px;
+      margin-right: 12px;
+    }
+    .info {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .title {
+      font-weight: bold;
+      font-size: 28px;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .description {
+      white-space: pre-wrap;
+      margin-top: 4px;
+      color: #97979c;
+      font-size: 16px;
+    }
+    .details {
+      padding: 12px;
+      border-top: 1px solid #3a3a3c;
+    }
+    .dropdown {
+      background-color: #343436;
+      border-radius: 10px;
+      margin-top: 12px;
+      overflow: hidden;
+    }
+    .dropdown-header {
+      padding: 14px;
+      cursor: pointer;
+      font-weight: bold;
+      background-color: #3a3a3c;
+    }
+    .dropdown-content {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 10px;
+      gap: 8px;
+    }
+    .dropdown.open .dropdown-content {
+      display: flex;
+    }
+    .dropdown-content a {
+      background-color: #588273;
+      text-decoration: none;    
+      color: white;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 16px;
+    }
+
+    .dropdown-content a.active {
+      background-color: #3c635b;
+    }
+
+    @media (max-width: 600px) {
+      .anime-summary {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .poster {
+        width: 100%;
+        max-width: 100%;
+        margin-right: 0;
+        margin-bottom: 12px;
+      }
+      .info {
+        width: 100%;
+      }
+      .title {
+        white-space: normal;
+      }
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #aaa;
+      margin-bottom: 32px;
+    }
+
+    .meta-block {
+      font-size: 16px;
+      color: #ddd;
+      line-height: 1.6;
+      margin-top: 6px;
+    }
+
+    .meta {
+      font-size: 16px;
+      color: #ddd;
+      line-height: 1.6;
+      margin-top: 6px;
+    }
+
+    .badge {
+      background-color: #F2A44C;
+      color: #3a3a3c;
+      font-weight: bold;
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      display: inline-block;
+      margin-bottom: 6px;
+      align-self: flex-start;
+      background: #F2A44C;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <a href="index.html" class="back-btn">Список аніме</a>
+    <div id="animeView">Завантаження...</div>
+  </div>
+
+  <script>
+    const container = document.getElementById('animeView');
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get("id");
+
+    async function loadAnime() {
+      try {
+        const res = await fetch(`http://localhost:8000/anime_id/${id}`);
+        if (!res.ok) {
+          container.innerHTML = "<p>Аніме не знайдено</p>";
+          return;
+        }
+        const anime = await res.json();
+        renderAnime(anime);
+      } catch (err) {
+        container.innerHTML = "<p>Помилка завантаження</p>";
+      }
+    }
+
+    function renderAnime(anime) {
+      const activeSeasonNumber = anime.active_season ?? anime.seasons[0].number;
+      const season = anime.seasons.find(s => s.number === activeSeasonNumber);
+
+      const isOngoing = !season.finished;
+      const badgeHTML = isOngoing ? `<div class="badge"><strong>ОЗВУЧУЄТЬСЯ</strong></div>` : '';
+
+      container.innerHTML = `
+        <div class="anime-item expanded">
+          <div class="details">
+            <div class="dropdown">
+              <div class="dropdown-header" onclick="this.parentNode.classList.toggle('open')">Сезони</div>
+              <div class="dropdown-content" id="seasonLinks">
+                ${anime.seasons.map(s => `
+                  <a href="#" data-season="${s.number}" class="${s.number === activeSeasonNumber ? 'active' : ''}"
+                     onclick="event.preventDefault(); switchSeason(${anime.id}, ${s.number}, this)">
+                     Сезон ${s.number}
+                  </a>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+
+          <div class="anime-summary">
+            <img src="http://localhost:8000/poster/${season.file_id}" class="poster" alt="Poster">
+            <div class="info">
+              ${badgeHTML}
+              <div class="title">${anime.title} ${season.number} сезон</div>
+              <div class="subtitle">${anime.title_en} ${season.number} season</div>
+              <div class="meta">
+                <div><strong>Жанр:</strong> ${season.genre}</div>
+                <div><strong>Кількість серій:</strong> ${season.episodes}</div>
+                <div><strong>Рік:</strong> ${season.year}</div>
+              </div>
+            </div>
+          </div>
+          <div class="details">
+            
+            <div class="description">${season.description}</div>
+            
+            <div class="dropdown">
+              <div class="dropdown-header" onclick="this.parentNode.classList.toggle('open')">Серії</div>
+              <div class="dropdown-content" id="episodes">
+                ${season.episodeLinks.map(e => `<a href="${e.url}">${e.title}</a>`).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function switchSeason(animeId, seasonNumber, element) {
+      fetch(`http://localhost:8000/anime_id/${animeId}`)
+        .then(res => res.json())
+        .then(anime => {
+          // Зняти активний клас з усіх сезонів
+          document.querySelectorAll('#seasonLinks a').forEach(a => a.classList.remove('active'));
+          if (element) element.classList.add('active');
+
+          const season = anime.seasons.find(s => s.number === seasonNumber);
+          const poster = document.querySelector('.poster');
+          const meta = document.querySelector('.meta');
+          const description = document.querySelector('.description');
+          const episodes = document.getElementById('episodes');
+
+          poster.src = `http://localhost:8000/poster/${season.file_id}`;
+          meta.innerHTML = `
+            <div><strong>Жанр:</strong> ${season.genre}</div>
+            <div><strong>Кількість серій:</strong> ${season.episodes}</div>
+            <div><strong>Рік:</strong> ${season.year}</div>
+          `;
+          description.textContent = season.description;
+          episodes.innerHTML = season.episodeLinks.map(e => `<a href="${e.url}">${e.title}</a>`).join('');
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', loadAnime);
+  </script>
+</body>
+</html>
+
