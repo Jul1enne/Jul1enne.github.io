@@ -30,26 +30,53 @@ async function renderAnimePage(page) {
     const item = document.createElement("div");
     item.className = "anime-item";
 
-    const isOngoing = !anime.finished;
-    const badgeHTML = isOngoing ? `<div class="badge"><strong>ОЗВУЧУЄТЬСЯ</strong></div>` : '';
+    let badgeHTML = '';
+    if (anime.type === "series" && !anime.finished) {
+      badgeHTML = `<div class="badge"><strong>ОЗВУЧУЄТЬСЯ</strong></div>`;
+    }
 
-    const itemHTML = `
-      <div class="anime-summary">
-        <img src="http://localhost:8000/poster/${anime.file_id}" class="poster" alt="Poster">
-        <div class="info">
-          ${badgeHTML}
-          <div class="title">${anime.title} ${anime.season} сезон</div>
-          <div class="subtitle">${anime.title_en} ${anime.season} season</div>
-          <div class="meta-block">
-            <div><strong>Рік:</strong> ${anime.year}</div>
-            <div><strong>Жанр:</strong> ${anime.genre}</div>
+    let itemHTML = '';
+
+    if (anime.type === "movie") {
+      itemHTML = `
+        <div class="anime-summary">
+          <img src="http://localhost:8000/poster/${anime.file_id}" class="poster" alt="Poster">
+          <div class="info">
+            <div class="title">${anime.title}</div>
+            <div class="subtitle">${anime.title_en}</div>
+            <div class="meta-block"><strong>Тип:</strong> ${anime.type === "movie" ? "Фільм" : "Серіал"}</div>
+            <div class="meta-block">
+              <div><strong>Рік:</strong> ${anime.year}</div>
+              <div><strong>Жанр:</strong> ${anime.genre}</div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="details" id="details-${anime.id}">
-        <a href="anime.html?id=${anime.id}" class="collapse-btn">Перейти</a>
-      </div>
-    `;
+        <div class="details" id="details-${anime.id}">
+          <a href="anime.html?id=${anime.id}" class="collapse-btn">Перейти</a>
+        </div>
+      `;
+    } else {
+      // Серіали
+      itemHTML = `
+        <div class="anime-summary">
+          <img src="http://localhost:8000/poster/${anime.file_id}" class="poster" alt="Poster">
+          <div class="info">
+            ${badgeHTML}
+            <div class="title">${anime.title} ${anime.season} сезон</div>
+            <div class="subtitle">${anime.title_en} ${anime.season} season</div>
+            <div class="meta-block"><strong>Тип:</strong> ${anime.type === "movie" ? "Фільм" : "Серіал"}</div>
+            <div class="meta-block">
+              <div><strong>Рік:</strong> ${anime.year}</div>
+              <div><strong>Жанр:</strong> ${anime.genre}</div>
+              <div><strong>Кількість серій:</strong> ${anime.episodes}</div>
+            </div>
+          </div>
+        </div>
+        <div class="details" id="details-${anime.id}">
+          <a href="anime.html?id=${anime.id}" class="collapse-btn">Перейти</a>
+        </div>
+      `;
+    }
 
     item.innerHTML = itemHTML;
 
