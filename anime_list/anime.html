@@ -226,7 +226,7 @@
         const activeSeasonNumber = anime.active_season ?? anime.seasons[0].number;
         const season = anime.seasons.find(s => s.number === activeSeasonNumber);
       
-        if (!anime.finished) {
+        if (!season.finished) {
           badgeHTML = `<div class="badge"><strong>ОЗВУЧУЄТЬСЯ</strong></div>`;
         }
       
@@ -251,13 +251,16 @@
               <div class="poster-container">
                 <img src="http://localhost:8000/poster/${season.file_id}" class="poster" alt="Poster">
                 <div class="anime-actions">
-                  <button id="watchedBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>Переглянуто</button>
+                  <button id="watchedBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>Переглянуте</button>
+                  <button id="watchBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>Дивлюсь</button>
                   <button id="plannedBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>На потім</button>
                 </div>
               </div>
                 
               <div class="info">
-                ${badgeHTML}
+                <div id="finished-anime">
+                  ${badgeHTML}
+                </div>
                 <div class="title">${anime.title} ${season.number} сезон</div>
                 <div class="subtitle"><i>${anime.title_en} ${season.number} season</i></div>
                 <div class="meta">
@@ -290,6 +293,7 @@
                 <img src="http://localhost:8000/poster/${anime.file_id}" class="poster" alt="Poster">
                 <div class="anime-actions">
                   <button id="watchedBtn" class="action-btn" data-anime-id=${anime.id} data-user-id=${userId}>Переглянуто</button>
+                  <button id="watchBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>Дивлюсь</button>
                   <button id="plannedBtn" class="action-btn" data-anime-id=${anime.id} data-user-id=${userId}>На потім</button>
                 </div>
               </div>
@@ -318,16 +322,19 @@
     
       // === ⬇️ Додаємо логіку кнопок ПІСЛЯ рендеру ===
       const watchedBtn = document.getElementById('watchedBtn');
+      const watchBtn = document.getElementById('watchBtn');
       const plannedBtn = document.getElementById('plannedBtn');
     
       fetch(`http://localhost:8000/user_status/${userId}/${anime.id}`)
         .then(res => res.json())
         .then(status => {
           if (status.watched) watchedBtn.classList.add('active');
+          if (status.watch) watchBtn.classList.add('active');
           if (status.planned) plannedBtn.classList.add('active');
         });
       
       watchedBtn.addEventListener("click", () => toggleStatus("watched", anime.id, userId));
+      watchBtn.addEventListener("click", () => toggleStatus("watch", anime.id, userId));
       plannedBtn.addEventListener("click", () => toggleStatus("planned", anime.id, userId));
     }
 
@@ -348,6 +355,15 @@
           const meta = document.querySelector('.meta');
           const description = document.querySelector('.description');
           const episodes = document.getElementById('episodes');
+
+          const finished_anime = document.getElementById('finished-anime');
+          if (!season.finished) {
+            badgeHTML = `<div class="badge"><strong>ОЗВУЧУЄТЬСЯ</strong></div>`;
+          }
+          else {
+            badgeHTML = ``
+          }
+          finished_anime.innerHTML = `${badgeHTML}`
 
           const title = document.querySelector('.title');
           const subtitle = document.querySelector('.subtitle');
@@ -370,10 +386,12 @@
           // 🔁 Оновлюємо кнопки
           anime_actions.innerHTML = `
             <button id="watchedBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>Переглянуто</button>
+            <button id="watchBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>Дивлюсь</button>
             <button id="plannedBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>На потім</button>
           `;
         
           const watchedBtn = document.getElementById('watchedBtn');
+          const watchBtn = document.getElementById('watchBtn');
           const plannedBtn = document.getElementById('plannedBtn');
         
           // Завантажити статус для цього сезону
@@ -381,11 +399,13 @@
             .then(res => res.json())
             .then(status => {
               if (status.watched) watchedBtn.classList.add("active");
+              if (status.watch) watchBtn.classList.add('active');
               if (status.planned) plannedBtn.classList.add("active");
             });
           
           // Прив’язати обробники натискання
           watchedBtn.addEventListener("click", () => toggleStatus("watched", season.id));
+          watchBtn.addEventListener("click", () => toggleStatus("watch", season.id));
           plannedBtn.addEventListener("click", () => toggleStatus("planned", season.id));
         });
     }
@@ -395,22 +415,31 @@
 
     function toggleStatus(status, animeId) {
       const watchedBtn = document.getElementById("watchedBtn");
+      const watchBtn = document.getElementById("watchBtn");
       const plannedBtn = document.getElementById("plannedBtn");
 
       const userId = watchedBtn.dataset.userId;
 
       let watched = watchedBtn.classList.contains("active");
+      let watch = watchBtn.classList.contains("active");
       let planned = plannedBtn.classList.contains("active");
 
       if (status === "watched") {
         watched = !watched;
         planned = false;
+        watch = false;
+      } else if (status === "watch") {
+        watch = !watch;
+        planned = false;
+        watched = false;
       } else if (status === "planned") {
         planned = !planned;
         watched = false;
+        watch = false;
       }
     
       watchedBtn.classList.toggle("active", watched);
+      watchBtn.classList.toggle("active", watch);
       plannedBtn.classList.toggle("active", planned);
     
       fetch("http://localhost:8000/user_anime_status", {
@@ -422,6 +451,7 @@
           user_id: userId,
           anime_id: animeId,
           watched: watched,
+          watch: watch,
           planned: planned
         }),
       })
