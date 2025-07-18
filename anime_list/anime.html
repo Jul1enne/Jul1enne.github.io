@@ -187,22 +187,9 @@
 
   <script>
 
-    let userId = null;
-
-    if (window.Telegram?.WebApp) {
-      window.Telegram.WebApp.ready();
-      window.Telegram.WebApp.onEvent('ready', () => {
-        const user = window.Telegram.WebApp.initDataUnsafe.user;
-        if (user) {
-          userId = user.id;
-          debug.textContent = "✅ User ID: " + userId;
-        } else {
-          debug.textContent = "❌ Користувача не знайдено";
-        }
-      });
-    } else {
-      debug.textContent = "❌ Telegram WebApp API недоступний";
-    }
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+    let user_id = tg.initDataUnsafe?.user?.id
 
     const container = document.getElementById('animeView');
     const urlParams = new URLSearchParams(window.location.search);
