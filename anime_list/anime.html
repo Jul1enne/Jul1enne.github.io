@@ -42,14 +42,22 @@
       align-items: flex-start;
     }
     .poster {
-      width: 25%;
-      max-width: 25%;
-      height: auto;
+      width: 100%;
       aspect-ratio: 2 / 3;
       border-radius: 10px;
-      margin-right: 12px;
+      object-fit: cover;
+      margin-bottom: 12px;
     }
+
+    .poster-container {
+      width: 25%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
     .info {
+      margin-left: 12px;
       flex: 1;
       overflow: hidden;
       display: flex;
@@ -145,23 +153,26 @@
 
     .anime-actions {
       display: flex;
+      flex-direction: column;
       gap: 10px;
-      margin-top: 14px;
+      width: 100%;
     }
-
     .action-btn {
+      width: 100%;
       padding: 10px 16px;
       border: none;
       border-radius: 10px;
       background-color: #3a3a3c;
       color: white;
-      cursor: pointer;
       font-size: 16px;
+      cursor: pointer;
       transition: background-color 0.2s ease;
     }
 
     .action-btn.active {
-      background-color: #588273;
+      color: #3a3a3c;
+      font-weight: bold;
+      background-color: #F2A44C;
     }
 
   </style>
@@ -173,10 +184,20 @@
   </div>
 
   <script>
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-    const user_id = tg.initDataUnsafe?.user?.id 
-    alert(user_id)
+    let userId = null;
+
+    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe) {
+      const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
+      if (tgUser) {
+        userId = tgUser.id;
+        console.log("User ID:", userId);
+      } else {
+        console.warn("Користувач не авторизований");
+      }
+    } else {
+      userId = 12312312312;
+      console.warn("Telegram WebApp API не доступний");
+    }
 
     const container = document.getElementById('animeView');
     const urlParams = new URLSearchParams(window.location.search);
@@ -225,7 +246,15 @@
             </div>
           
             <div class="anime-summary">
-              <img src="http://localhost:8000/poster/${season.file_id}" class="poster" alt="Poster">
+
+              <div class="poster-container">
+                <img src="http://localhost:8000/poster/${season.file_id}" class="poster" alt="Poster">
+                <div class="anime-actions">
+                  <button id="watchedBtn" class="action-btn">Переглянуто</button>
+                  <button id="plannedBtn" class="action-btn">На потім</button>
+                </div>
+              </div>
+                
               <div class="info">
                 ${badgeHTML}
                 <div class="title">${anime.title} ${season.number} сезон</div>
@@ -237,10 +266,7 @@
                 </div>
               </div>
             </div>
-            <div class="anime-actions">
-              <button id="watchedBtn" class="action-btn">Переглянуто</button>
-              <button id="plannedBtn" class="action-btn">На потім</button>
-            </div>
+            
             <div class="details">
               <div class="description">${season.description}</div>
               <div class="dropdown">
@@ -284,7 +310,7 @@
       const watchedBtn = document.getElementById('watchedBtn');
       const plannedBtn = document.getElementById('plannedBtn');
     
-      fetch(`http://localhost:8000/user_status/${user_id}/${anime.id}`)
+      fetch(`http://localhost:8000/user_status/${userId}/${anime.id}`)
         .then(res => res.json())
         .then(status => {
           if (status.watched) watchedBtn.classList.add('active');
