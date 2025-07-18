@@ -16,7 +16,7 @@ async function fetchAnimeList() {
   } else if (filter === "watch") {
     url = `http://localhost:8000/planned_anime_list?user_id=${userId}`;
   } else if (filter === "planned") {
-    url = `http://localhost:8000/planned_anime_list?user_id=${userId}`;
+    url = `http://localhost:8000/watch_anime_list?user_id=${userId}`;
   }
 
 
