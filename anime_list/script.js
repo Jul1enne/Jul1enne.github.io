@@ -40,7 +40,7 @@ async function fetchAnimeList() {
   }
 }
 
-const MAX_PER_PAGE = 1;
+const MAX_PER_PAGE = 5;
 let animeList = [];
 let nullAnimeListHTML = '';
 
