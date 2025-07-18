@@ -188,26 +188,19 @@
     let userId = null;
 
     // Дочекаємось завантаження DOM
-    document.addEventListener('DOMContentLoaded', () => {
-      // Перевіряємо наявність Telegram WebApp
-      if (window.Telegram && window.Telegram.WebApp) {
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-      
-        // Після ready — можна безпечно отримати initDataUnsafe
-        const tgUser = tg.initDataUnsafe?.user;
-        alert(tgUser)
-        alert(tgUser.id)
-        if (tgUser) {
-          userId = tgUser.id;
-          console.log("User ID:", userId);
-        } else {
-          console.warn("Користувач не авторизований або user = null");
-        }
+    window.addEventListener("DOMContentLoaded", () => {
+      const tg = window.Telegram.WebApp;
+        
+      tg.ready(); // Офіційна рекомендація Telegram
+      tg.expand();
+        
+      const tgUser = tg.initDataUnsafe?.user;
+        
+      if (tgUser) {
+        const userId = tgUser.id;
+        console.log("User ID:", userId);
       } else {
-        // Якщо Telegram API не доступний — фейковий ID для тесту
-        userId = 12312312312;
-        console.warn("Telegram WebApp API не доступний");
+        console.warn("Користувач не авторизований або Telegram WebApp API не повернув user");
       }
     });
 
