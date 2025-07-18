@@ -2,8 +2,7 @@
 
 const urlParams = new URLSearchParams(window.location.search);
 const filter = urlParams.get("filter") || "all";
-const userId_str = urlParams.get("userId") || null;
-const userId = parseInt(urlParams.get("userId")) || null;
+const userId = urlParams.get("userId") || null;
 
 alert(userId)
 
@@ -14,9 +13,9 @@ async function fetchAnimeList() {
   if (filter === "watched") {
     url = `http://localhost:8000/watched_anime_list?user_id=${userId}`;
   } else if (filter === "watch") {
-    url = `http://localhost:8000/planned_anime_list?user_id=${userId}`;
-  } else if (filter === "planned") {
     url = `http://localhost:8000/watch_anime_list?user_id=${userId}`;
+  } else if (filter === "planned") {
+    url = `http://localhost:8000/planned_anime_list?user_id=${userId}`;
   }
 
 
@@ -73,7 +72,7 @@ async function renderAnimePage(page) {
           </div>
         </div>
         <div class="details" id="details-${anime.id}">
-          <a href="anime.html?id=${anime.id}&user_id=${userId_str}" class="collapse-btn">Перейти</a>
+          <a href="anime.html?id=${anime.id}&userId=${userId}" class="collapse-btn">Перейти</a>
         </div>
       `;
     } else {
@@ -94,7 +93,7 @@ async function renderAnimePage(page) {
           </div>
         </div>
         <div class="details" id="details-${anime.id}">
-          <a href="anime.html?id=${anime.id}&user_id=${userId_str}" class="collapse-btn">Перейти</a>
+          <a href="anime.html?id=${anime.id}&userId=${userId}" class="collapse-btn">Перейти</a>
         </div>
       `;
     }
