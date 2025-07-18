@@ -2,7 +2,8 @@
 
 const urlParams = new URLSearchParams(window.location.search);
 const filter = urlParams.get("filter") || "all";
-const userId = parseInt(urlParams.get("userId")) || 123;
+const userId_str = urlParams.get("userId") || null;
+const userId = parseInt(urlParams.get("userId")) || null;
 
 alert(userId)
 
@@ -72,7 +73,7 @@ async function renderAnimePage(page) {
           </div>
         </div>
         <div class="details" id="details-${anime.id}">
-          <a href="anime.html?id=${anime.id}&user_id=${userId}" class="collapse-btn">Перейти</a>
+          <a href="anime.html?id=${anime.id}&user_id=${userId_str}" class="collapse-btn">Перейти</a>
         </div>
       `;
     } else {
@@ -93,7 +94,7 @@ async function renderAnimePage(page) {
           </div>
         </div>
         <div class="details" id="details-${anime.id}">
-          <a href="anime.html?id=${anime.id}&user_id=${userId}" class="collapse-btn">Перейти</a>
+          <a href="anime.html?id=${anime.id}&user_id=${userId_str}" class="collapse-btn">Перейти</a>
         </div>
       `;
     }
