@@ -352,28 +352,39 @@
 
     document.addEventListener('DOMContentLoaded', loadAnime);
   
-    function toggleStatus(animeId, statusType, button) {
-      const isActive = button.classList.contains('active');
-      const action = isActive ? 'remove' : 'add';
-
-      fetch(`http://localhost:8000/user_anime_status`, {
-        method: 'POST',
+    function toggleStatus(status) {
+      if (status === "watched") {
+        watchedBtn.classList.add("active");
+        plannedBtn.classList.remove("active");
+      } else if (status === "planned") {
+        plannedBtn.classList.add("active");
+        watchedBtn.classList.remove("active");
+      }
+    
+      // Надсилаємо запит до API
+      fetch("http://localhost:8000/user_anime_status", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           user_id: userId,
           anime_id: animeId,
-          status: statusType,
-          action: action
+          status: status,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Помилка при оновленні статусу");
+          }
+          return response.json();
         })
-      }).then(res => {
-        if (res.ok) {
-          button.classList.toggle('active');
-        } else {
-          alert("Помилка при оновленні статусу");
-        }
-      });
+        .then((data) => {
+          console.log("Статус оновлено:", data);
+        })
+        .catch((error) => {
+          console.error("Помилка:", error);
+        });
     }
 
   </script>
