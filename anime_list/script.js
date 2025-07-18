@@ -4,6 +4,8 @@ const urlParams = new URLSearchParams(window.location.search);
 const filter = urlParams.get("filter") || "all";
 const userId = urlParams.get("userId") || 123;
 
+alert(userId)
+
 // API-запит на отримання списку аніме
 async function fetchAnimeList() {
   let url = "http://localhost:8000/anime_list"; // all за замовчуванням
@@ -70,7 +72,7 @@ async function renderAnimePage(page) {
           </div>
         </div>
         <div class="details" id="details-${anime.id}">
-          <a href="anime.html?id=${anime.id}?user_id=${userId}" class="collapse-btn">Перейти</a>
+          <a href="anime.html?id=${anime.id}&user_id=${userId}" class="collapse-btn">Перейти</a>
         </div>
       `;
     } else {
@@ -91,7 +93,7 @@ async function renderAnimePage(page) {
           </div>
         </div>
         <div class="details" id="details-${anime.id}">
-          <a href="anime.html?id=${anime.id}?user_id=${userId}" class="collapse-btn">Перейти</a>
+          <a href="anime.html?id=${anime.id}&user_id=${userId}" class="collapse-btn">Перейти</a>
         </div>
       `;
     }
