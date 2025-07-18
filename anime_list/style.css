@@ -180,3 +180,100 @@ html, body {
   align-self: flex-start;
   background: #F2A44C;
 }
+
+.anime-card.empty-card {
+  background-color: #2b2b2d;
+  border: 2px dashed #444;
+  border-radius: 16px;
+  padding: 24px;
+  margin: 20px;
+  color: #ccc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  opacity: 0.8;
+  box-shadow: 0 0 8px rgba(0,0,0,0.3);
+}
+
+.anime-card.empty-card .anime-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.anime-card.empty-card .anime-subtext {
+  font-size: 16px;
+  color: #aaa;
+}
+
+.filter-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background-color: #3a3a3c;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.filter-btn.active {
+  background-color: #F2A44C;
+  color: #3a3a3c;
+  font-weight: bold;
+}
+
+.filters-wrapper {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.filter-row {
+  display: flex;
+  gap: 12px;
+}
+
+.filter-row .filter-btn {
+  flex: 1;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.loading-indicator {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #ccc;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.loading-indicator.hidden {
+  opacity: 0;
+  pointer-events: none;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.loading-card {
+  background-color: #2c2c2e;
+  border-radius: 16px;
+  padding: 24px;
+  margin: 20px 0;
+  color: #ccc;
+  text-align: center;
+  font-size: 18px;
+  opacity: 0.9;
+  box-shadow: 0 0 8px rgba(0,0,0,0.3);
+}
+
+.hidden {
+  display: none;
+}
