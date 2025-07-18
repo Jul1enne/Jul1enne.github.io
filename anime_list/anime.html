@@ -173,6 +173,10 @@
   </div>
 
   <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+    const user_id = tg.initDataUnsafe?.user?.id
+
     const container = document.getElementById('animeView');
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get("id");
