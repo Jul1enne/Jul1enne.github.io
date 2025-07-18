@@ -251,8 +251,8 @@
               <div class="poster-container">
                 <img src="http://localhost:8000/poster/${season.file_id}" class="poster" alt="Poster">
                 <div class="anime-actions">
-                  <button id="watchedBtn" class="action-btn">Переглянуто</button>
-                  <button id="plannedBtn" class="action-btn">На потім</button>
+                  <button id="watchedBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>Переглянуто</button>
+                  <button id="plannedBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>На потім</button>
                 </div>
               </div>
                 
@@ -283,7 +283,15 @@
         content = `
           <div class="anime-item expanded">
             <div class="anime-summary">
-              <img src="http://localhost:8000/poster/${anime.file_id}" class="poster" alt="Poster">
+
+              <div class="poster-container">
+                <img src="http://localhost:8000/poster/${season.file_id}" class="poster" alt="Poster">
+                <div class="anime-actions">
+                  <button id="watchedBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>Переглянуто</button>
+                  <button id="plannedBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>На потім</button>
+                </div>
+              </div>
+
               <div class="info">
                 <div class="title">${anime.title}</div>
                 <div class="subtitle">${anime.title_en}</div>
@@ -318,8 +326,8 @@
           if (status.planned) plannedBtn.classList.add('active');
         });
       
-      watchedBtn.addEventListener('click', () => toggleStatus(anime.id, 'watched', watchedBtn));
-      plannedBtn.addEventListener('click', () => toggleStatus(anime.id, 'planned', plannedBtn));
+      watchedBtn.addEventListener("click", () => toggleStatus("watched"));
+      plannedBtn.addEventListener("click", () => toggleStatus("planned"));
     }
 
 
@@ -360,7 +368,10 @@
         plannedBtn.classList.add("active");
         watchedBtn.classList.remove("active");
       }
-    
+
+      const animeId = watchedBtn.dataset.animeId;
+      const userId = watchedBtn.dataset.userId;
+
       // Надсилаємо запит до API
       fetch("http://localhost:8000/user_anime_status", {
         method: "POST",
