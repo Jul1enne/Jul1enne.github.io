@@ -20,9 +20,9 @@ async function fetchAnimeList() {
 
     if (data.length === 0) {
       const nullMessages = {
-        watched: "У вашому списку переглянутого ще нічого немає.",
-        watch: "У вашому списку перегляду ще нічого немає.",
-        planned: "У вашому списку «на потім» ще нічого немає.",
+        watched: "У вашому списку «Переглянуто» ще нічого немає.",
+        watch: "У вашому списку «Дивлюсь» ще нічого немає.",
+        planned: "У вашому списку «На потім» ще нічого немає.",
         all: "Список аніме порожній.",
       };
       const message = nullMessages[filter] || nullMessages["all"];
