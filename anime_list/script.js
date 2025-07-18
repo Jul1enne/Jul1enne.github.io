@@ -40,7 +40,7 @@ async function fetchAnimeList() {
   }
 }
 
-const MAX_PER_PAGE = 3;
+const MAX_PER_PAGE = 1;
 let animeList = [];
 let nullAnimeListHTML = '';
 
@@ -123,16 +123,18 @@ function renderPagination(totalPages, currentPage) {
   const pagination = document.getElementById("pagination");
   pagination.innerHTML = "";
 
-  const delta = 2; // скільки сторінок показувати ліворуч/праворуч від активної
+  const delta = 1;
 
   function createPageBtn(page) {
     const btn = document.createElement("button");
     btn.textContent = page;
     btn.className = "page-btn";
-    if (page === currentPage) btn.style.backgroundColor = "#444";
-    btn.disabled = (page === currentPage);
+    if (page === currentPage) {
+      btn.style.backgroundColor = "#444";
+      btn.disabled = true;
+    }
     btn.addEventListener("click", () => {
-      if (currentPage === page) return;
+      if (page === currentPage) return;
       currentPage = page;
 
       // Оновити URL параметр page
@@ -148,7 +150,7 @@ function renderPagination(totalPages, currentPage) {
   // Перша сторінка
   pagination.appendChild(createPageBtn(1));
 
-  // "..." якщо треба між першою і лівим сусідом
+  // "..." між першою і лівим сусідом
   if (currentPage - delta > 2) {
     const dots = document.createElement("span");
     dots.textContent = "...";
@@ -156,12 +158,22 @@ function renderPagination(totalPages, currentPage) {
     pagination.appendChild(dots);
   }
 
-  // Сторінки навколо поточної
-  for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) {
-    pagination.appendChild(createPageBtn(i));
+  // Лівий сусід
+  if (currentPage - 1 > 1) {
+    pagination.appendChild(createPageBtn(currentPage - 1));
   }
 
-  // "..." якщо треба між правим сусідом і останньою сторінкою
+  // Поточна сторінка (якщо вона не перша і не остання)
+  if (currentPage !== 1 && currentPage !== totalPages) {
+    pagination.appendChild(createPageBtn(currentPage));
+  }
+
+  // Правий сусід
+  if (currentPage + 1 < totalPages) {
+    pagination.appendChild(createPageBtn(currentPage + 1));
+  }
+
+  // "..." між правим сусідом і останньою сторінкою
   if (currentPage + delta < totalPages - 1) {
     const dots = document.createElement("span");
     dots.textContent = "...";
@@ -169,11 +181,12 @@ function renderPagination(totalPages, currentPage) {
     pagination.appendChild(dots);
   }
 
-  // Остання сторінка, якщо їх більше 1
+  // Остання сторінка (якщо їх більше 1)
   if (totalPages > 1) {
     pagination.appendChild(createPageBtn(totalPages));
   }
 }
+
 
 function setActiveFilter(newFilter) {
   const filterButtons = document.querySelectorAll('.filter-btn');
