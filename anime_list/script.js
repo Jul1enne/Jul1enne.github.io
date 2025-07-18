@@ -1,7 +1,34 @@
+
+let userId = null;
+if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe) {
+  const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
+  if (tgUser) {
+    userId = tgUser.id;
+    console.log("User ID:", userId);
+  } else {
+    console.warn("Користувач не авторизований");
+  }
+} else {
+  userId = 12312312312;
+  console.warn("Telegram WebApp API не доступний");
+}
+
+const urlParams = new URLSearchParams(window.location.search);
+const filter = urlParams.get("filter") || "all";
+
+
 // API-запит на отримання списку аніме
 async function fetchAnimeList() {
+  let url = "http://localhost:8000/anime_list"; // all за замовчуванням
+
+  if (filter === "watched") {
+    url = `http://localhost:8000/watched_anime_list?user_id=${userId}`;
+  } else if (filter === "planned") {
+    url = `http://localhost:8000/planned_anime_list?user_id=${userId}`;
+  }
+
   try {
-    const response = await fetch("http://localhost:8000/anime_list");
+    const response = await fetch(url);
     if (!response.ok) throw new Error("Помилка при завантаженні аніме");
     const data = await response.json();
     return data;
@@ -82,6 +109,7 @@ async function renderAnimePage(page) {
     item.innerHTML = itemHTML;
 
     item.querySelector(".anime-summary").addEventListener("click", () => {
+      localStorage.setItem('animeListReturnUrl', window.location.href);
       document.querySelectorAll(".anime-item.expanded").forEach(el => {
         if (el !== item) el.classList.remove("expanded");
       });

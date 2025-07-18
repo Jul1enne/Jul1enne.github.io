@@ -122,7 +122,7 @@
     .subtitle {
       font-size: 14px;
       color: #aaa;
-      margin-bottom: 32px;
+      margin-bottom: 16px;
     }
 
     .meta-block {
@@ -180,7 +180,7 @@
 </head>
 <body>
   <div class="wrapper">
-    <a href="index.html" class="back-btn">Список аніме</a>
+    <a href="index.html" id="backToListBtn" class="back-btn">Список аніме</a>
     <div id="animeView">Завантаження...</div>
   </div>
 
@@ -259,11 +259,13 @@
               <div class="info">
                 ${badgeHTML}
                 <div class="title">${anime.title} ${season.number} сезон</div>
-                <div class="subtitle">${anime.title_en} ${season.number} season</div>
+                <div class="subtitle"><i>${anime.title_en} ${season.number} season</i></div>
                 <div class="meta">
                   <div><strong>Жанр:</strong> ${season.genre}</div>
                   <div><strong>Кількість серій:</strong> ${season.episodes}</div>
                   <div><strong>Рік:</strong> ${season.year}</div>
+                  <div><strong>Режисер(и):</strong> ${season.director}</div>
+                  <div><strong>Студія видавець:</strong> ${season.studio_publisher}</div>
                 </div>
               </div>
             </div>
@@ -285,26 +287,25 @@
             <div class="anime-summary">
 
               <div class="poster-container">
-                <img src="http://localhost:8000/poster/${season.file_id}" class="poster" alt="Poster">
+                <img src="http://localhost:8000/poster/${anime.file_id}" class="poster" alt="Poster">
                 <div class="anime-actions">
-                  <button id="watchedBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>Переглянуто</button>
-                  <button id="plannedBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>На потім</button>
+                  <button id="watchedBtn" class="action-btn" data-anime-id=${anime.id} data-user-id=${userId}>Переглянуто</button>
+                  <button id="plannedBtn" class="action-btn" data-anime-id=${anime.id} data-user-id=${userId}>На потім</button>
                 </div>
               </div>
 
               <div class="info">
                 <div class="title">${anime.title}</div>
-                <div class="subtitle">${anime.title_en}</div>
+                <div class="subtitle"><i>${anime.title_en}</i></div>
                 <div class="meta">
                   <div><strong>Жанр:</strong> ${anime.genre}</div>
                   <div><strong>Рік:</strong> ${anime.year}</div>
+                  <div><strong>Режисер(и):</strong> ${anime.director}</div>
+                  <div><strong>Студія видавець:</strong> ${anime.studio_publisher}</div>
                 </div>
               </div>
             </div>
-            <div class="anime-actions">
-              <button id="watchedBtn" class="action-btn">Переглянуто</button>
-              <button id="plannedBtn" class="action-btn">На потім</button>
-            </div>
+            
             <div class="details">
               <div class="description">${anime.description}</div>
               <a href="${anime.episodeLink}" class="back-btn">Дивитися</a>
@@ -326,8 +327,8 @@
           if (status.planned) plannedBtn.classList.add('active');
         });
       
-      watchedBtn.addEventListener("click", () => toggleStatus("watched"));
-      plannedBtn.addEventListener("click", () => toggleStatus("planned"));
+      watchedBtn.addEventListener("click", () => toggleStatus("watched", anime.id, userId));
+      plannedBtn.addEventListener("click", () => toggleStatus("planned", anime.id, userId));
     }
 
 
@@ -340,39 +341,78 @@
           // Зняти активний клас з усіх сезонів
           document.querySelectorAll('#seasonLinks a').forEach(a => a.classList.remove('active'));
           if (element) element.classList.add('active');
-
+        
           const season = anime.seasons.find(s => s.number === seasonNumber);
+          const anime_actions = document.querySelector('.anime-actions');
           const poster = document.querySelector('.poster');
           const meta = document.querySelector('.meta');
           const description = document.querySelector('.description');
           const episodes = document.getElementById('episodes');
 
+          const title = document.querySelector('.title');
+          const subtitle = document.querySelector('.subtitle');
+          title.textContent = `${anime.title} ${season.number} сезон`;
+          subtitle.textContent = `${anime.title_en} ${season.number} season`;
+
+        
+          // Оновлюємо основні дані
           poster.src = `http://localhost:8000/poster/${season.file_id}`;
           meta.innerHTML = `
             <div><strong>Жанр:</strong> ${season.genre}</div>
             <div><strong>Кількість серій:</strong> ${season.episodes}</div>
             <div><strong>Рік:</strong> ${season.year}</div>
+            <div><strong>Режисер(и):</strong> ${season.director}</div>
+            <div><strong>Студія видавець:</strong> ${season.studio_publisher}</div>
           `;
           description.textContent = season.description;
           episodes.innerHTML = season.episodeLinks.map(e => `<a href="${e.url}">${e.title}</a>`).join('');
+        
+          // 🔁 Оновлюємо кнопки
+          anime_actions.innerHTML = `
+            <button id="watchedBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>Переглянуто</button>
+            <button id="plannedBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>На потім</button>
+          `;
+        
+          const watchedBtn = document.getElementById('watchedBtn');
+          const plannedBtn = document.getElementById('plannedBtn');
+        
+          // Завантажити статус для цього сезону
+          fetch(`http://localhost:8000/user_status/${userId}/${season.id}`)
+            .then(res => res.json())
+            .then(status => {
+              if (status.watched) watchedBtn.classList.add("active");
+              if (status.planned) plannedBtn.classList.add("active");
+            });
+          
+          // Прив’язати обробники натискання
+          watchedBtn.addEventListener("click", () => toggleStatus("watched", season.id));
+          plannedBtn.addEventListener("click", () => toggleStatus("planned", season.id));
         });
     }
 
     document.addEventListener('DOMContentLoaded', loadAnime);
   
-    function toggleStatus(status) {
-      if (status === "watched") {
-        watchedBtn.classList.add("active");
-        plannedBtn.classList.remove("active");
-      } else if (status === "planned") {
-        plannedBtn.classList.add("active");
-        watchedBtn.classList.remove("active");
-      }
 
-      const animeId = watchedBtn.dataset.animeId;
+    function toggleStatus(status, animeId) {
+      const watchedBtn = document.getElementById("watchedBtn");
+      const plannedBtn = document.getElementById("plannedBtn");
+
       const userId = watchedBtn.dataset.userId;
 
-      // Надсилаємо запит до API
+      let watched = watchedBtn.classList.contains("active");
+      let planned = plannedBtn.classList.contains("active");
+
+      if (status === "watched") {
+        watched = !watched;
+        planned = false;
+      } else if (status === "planned") {
+        planned = !planned;
+        watched = false;
+      }
+    
+      watchedBtn.classList.toggle("active", watched);
+      plannedBtn.classList.toggle("active", planned);
+    
       fetch("http://localhost:8000/user_anime_status", {
         method: "POST",
         headers: {
@@ -381,22 +421,37 @@
         body: JSON.stringify({
           user_id: userId,
           anime_id: animeId,
-          status: status,
+          watched: watched,
+          planned: planned
         }),
       })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Помилка при оновленні статусу");
-          }
-          return response.json();
+        .then(res => {
+          if (!res.ok) throw new Error("Помилка при оновленні статусу");
+          return res.json();
         })
-        .then((data) => {
+        .then(data => {
           console.log("Статус оновлено:", data);
         })
-        .catch((error) => {
-          console.error("Помилка:", error);
+        .catch(err => {
+          console.error("Помилка:", err);
         });
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const backBtn = document.getElementById('backToListBtn');
+      const savedUrl = localStorage.getItem('animeListReturnUrl');
+
+      if (backBtn) {
+        backBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (savedUrl) {
+            window.location.href = savedUrl;
+          } else {
+            window.location.href = 'index.html'; // запасний варіант
+          }
+        });
+      }
+    });
 
   </script>
 </body>
