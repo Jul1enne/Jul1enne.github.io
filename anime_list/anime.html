@@ -190,7 +190,7 @@
 
     const container = document.getElementById('animeView');
     const urlParams = new URLSearchParams(window.location.search);
-    const userId = parseInt(urlParams.get("userId")) || 123;
+    const userId = urlParams.get("userId") || null;
     const id = urlParams.get("id");
 
     async function loadAnime() {
