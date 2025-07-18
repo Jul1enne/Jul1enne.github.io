@@ -196,7 +196,8 @@
       
         // Після ready — можна безпечно отримати initDataUnsafe
         const tgUser = tg.initDataUnsafe?.user;
-      
+        alert(tgUser)
+        alert(tgUser.id)
         if (tgUser) {
           userId = tgUser.id;
           console.log("User ID:", userId);
