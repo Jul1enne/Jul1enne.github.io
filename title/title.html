@@ -187,6 +187,8 @@
         <div class="section-title">Опис аніме</div>
         <div class="form-group"><input id="title_release_year" type="number" placeholder="Рік випуску аніме"></div>
         <div class="form-group"><input id="title_ganre" placeholder="Жанр"></div>
+        <div class="form-group"><input id="title-director" placeholder="Режисер"></div>
+        <div class="form-group"><input id="title-studio_publisher" placeholder="Студія видавець"></div>
         <div class="form-group"><textarea id="title_description" placeholder="Опис"></textarea></div>
 
         <div class="section-title">Додатково</div>
@@ -231,6 +233,8 @@
         <div class="section-title">Опис сезону</div>
         <div class="form-group"><input id="season_release_year" type="number" placeholder="Рік випуску сезону"></div>
         <div class="form-group"><input id="season_ganre" placeholder="Жанр"></div>
+        <div class="form-group"><input id="season-director" placeholder="Режисер"></div>
+        <div class="form-group"><input id="season-studio_publisher" placeholder="Студія видавець"></div>
         <div class="form-group"><textarea id="season-description" placeholder="Опис"></textarea></div>
 
         <div class="section-title">Опис</div>
@@ -278,6 +282,8 @@
 
         release_year: document.getElementById('title_release_year')?.value,
         ganre: document.getElementById('title_ganre')?.value,
+        director: document.getElementById('title-director')?.value,
+        studio_publisher: document.getElementById('title-studio_publisher')?.value,
         description: document.getElementById('title_description')?.value,
 
         sound: document.getElementById('title_sound')?.value,
@@ -308,6 +314,8 @@
 
         release_year: document.getElementById('season_release_year')?.value,
         ganre: document.getElementById('season_ganre')?.value,
+        director: document.getElementById('season-director')?.value,
+        studio_publisher: document.getElementById('season-studio_publisher')?.value,
         description: document.getElementById('season_description')?.value,
 
         sound: document.getElementById('season_sound')?.value,

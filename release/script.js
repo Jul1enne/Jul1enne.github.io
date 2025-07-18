@@ -23,7 +23,10 @@ function sendEpisode() {
         episode_title: document.getElementById('episode_title').value,
         voiced_by: voicers,
         description: document.getElementById('description').value,
-        include_sound: document.getElementById('include_sound_switch')?.checked ?? false,
+        director: document.getElementById('director').value,
+        studio_publisher: document.getElementById('studio_publisher').value,
+        include_finished: document.getElementById('include_sound_switch')?.checked ?? false,
+        include_sound: document.getElementById('include_sound_switch')?.checked ?? true,
         tag: document.getElementById('anime_list')?.value,
     };
     

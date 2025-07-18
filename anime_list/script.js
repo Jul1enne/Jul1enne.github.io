@@ -37,6 +37,7 @@ async function renderAnimePage(page) {
 
     let itemHTML = '';
 
+    //<div class="meta-block"><strong>Тип:</strong> ${anime.type === "movie" ? "Фільм" : "Серіал"}</div>
     if (anime.type === "movie") {
       itemHTML = `
         <div class="anime-summary">
@@ -44,7 +45,7 @@ async function renderAnimePage(page) {
           <div class="info">
             <div class="title">${anime.title}</div>
             <div class="subtitle">${anime.title_en}</div>
-            <div class="meta-block"><strong>Тип:</strong> ${anime.type === "movie" ? "Фільм" : "Серіал"}</div>
+
             <div class="meta-block">
               <div><strong>Рік:</strong> ${anime.year}</div>
               <div><strong>Жанр:</strong> ${anime.genre}</div>
@@ -64,7 +65,7 @@ async function renderAnimePage(page) {
             ${badgeHTML}
             <div class="title">${anime.title} ${anime.season} сезон</div>
             <div class="subtitle">${anime.title_en} ${anime.season} season</div>
-            <div class="meta-block"><strong>Тип:</strong> ${anime.type === "movie" ? "Фільм" : "Серіал"}</div>
+            
             <div class="meta-block">
               <div><strong>Рік:</strong> ${anime.year}</div>
               <div><strong>Жанр:</strong> ${anime.genre}</div>
@@ -106,54 +107,7 @@ async function renderAnimePage(page) {
 
 // Завантаження та відображення сторінки
 (async () => {
-  animeList = [
-  {
-    id: 1,
-    type: 'series',
-    title: "Дядечко з іншого світу",
-    title_en: "Uncle from another world",
-    description: `Сімнадцять років тому 17-річний дядько Такафумі впав у кому через те, що його збила вантажівка, але тепер він повернувся, як людина, що піднялася з могили.
-Поки дядько мешкає разом із Такафумі, хлопець дізнається про його фантастичні пригоди й безмежну любов до ігор на SEGA. Але інколи історії дядька, часто сповнені самотності й жорстокості, викликають у Такафумі як радість, так і смуток.
-Двоє чоловіків різних поколінь старанно працюють над створенням відеоконтенту в новій захопливій комедії про інший світ, дія якої відбувається в кутку багатоквартирного будинку.`,
-    file_id: "AgACAgIAAxkBAAMdaHPhVCvW8wVNcBTvS0fgdjUSJXsAAnT3MRvvwKBLAmOi_LCskpEBAAMCAAN5AAM2BA",
-    season: 1,
-    year: 2022,
-    episodes: 13,
-    genre: "Екшн, Пригоди",
-    finished: true,
-  },
-  {
-    id: 2,
-    type: 'series',
-    title: "Дядечко з іншого світу",
-    title_en: "Uncle from another world",
-    description: `Сімнадцять років тому 17-річний дядько Такафумі впав у кому через те, що його збила вантажівка, але тепер він повернувся, як людина, що піднялася з могили.
-Поки дядько мешкає разом із Такафумі, хлопець дізнається про його фантастичні пригоди й безмежну любов до ігор на SEGA. Але інколи історії дядька, часто сповнені самотності й жорстокості, викликають у Такафумі як радість, так і смуток.
-Двоє чоловіків різних поколінь старанно працюють над створенням відеоконтенту в новій захопливій комедії про інший світ, дія якої відбувається в кутку багатоквартирного будинку.`,
-    file_id: "AgACAgIAAxkBAAMdaHPhVCvW8wVNcBTvS0fgdjUSJXsAAnT3MRvvwKBLAmOi_LCskpEBAAMCAAN5AAM2BA",
-    season: 2,
-    year: 2022,
-    episodes: 13,
-    genre: "Екшн, Пригоди",
-    finished: false,
-  },
-  {
-    id: 3,
-    type: 'movie',
-    title: "Дядечко з іншого світу",
-    title_en: "Uncle from another world",
-    description: `Сімнадцять років тому 17-річний дядько Такафумі впав у кому через те, що його збила вантажівка, але тепер він повернувся, як людина, що піднялася з могили.
-Поки дядько мешкає разом із Такафумі, хлопець дізнається про його фантастичні пригоди й безмежну любов до ігор на SEGA. Але інколи історії дядька, часто сповнені самотності й жорстокості, викликають у Такафумі як радість, так і смуток.
-Двоє чоловіків різних поколінь старанно працюють над створенням відеоконтенту в новій захопливій комедії про інший світ, дія якої відбувається в кутку багатоквартирного будинку.`,
-    file_id: "AgACAgIAAxkBAAMdaHPhVCvW8wVNcBTvS0fgdjUSJXsAAnT3MRvvwKBLAmOi_LCskpEBAAMCAAN5AAM2BA",
-    season: 2,
-    year: 2022,
-    episodes: 13,
-    genre: "Екшн, Пригоди",
-    finished: false,
-  },
-];
-
+  animeList = await fetchAnimeList();
 
   renderAnimePage(currentPage);
 })();

@@ -66,8 +66,9 @@
     .description {
       white-space: pre-wrap;
       margin-top: 4px;
-      color: #97979c;
       font-size: 16px;
+      color: #aaa;
+      margin-bottom: 24px;
     }
     .details {
       padding: 12px;
@@ -142,6 +143,27 @@
       background: #F2A44C;
     }
 
+    .anime-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .action-btn {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 10px;
+      background-color: #3a3a3c;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.2s ease;
+    }
+
+    .action-btn.active {
+      background-color: #588273;
+    }
+
   </style>
 </head>
 <body>
@@ -170,55 +192,107 @@
     }
 
     function renderAnime(anime) {
-      const activeSeasonNumber = anime.active_season ?? anime.seasons[0].number;
-      const season = anime.seasons.find(s => s.number === activeSeasonNumber);
+  
+      if (anime.type === "series") {
+        const activeSeasonNumber = anime.active_season ?? anime.seasons[0].number;
+        const season = anime.seasons.find(s => s.number === activeSeasonNumber);
 
-      const isOngoing = !season.finished;
-      const badgeHTML = isOngoing ? `<div class="badge"><strong>ОЗВУЧУЄТЬСЯ</strong></div>` : '';
+        let badgeHTML = '';
+        if (!anime.finished) {
+          badgeHTML = `<div class="badge"><strong>ОЗВУЧУЄТЬСЯ</strong></div>`;
+        }
 
-      container.innerHTML = `
-        <div class="anime-item expanded">
-          <div class="details">
-            <div class="dropdown">
-              <div class="dropdown-header" onclick="this.parentNode.classList.toggle('open')">Сезони</div>
-              <div class="dropdown-content" id="seasonLinks">
-                ${anime.seasons.map(s => `
-                  <a href="#" data-season="${s.number}" class="${s.number === activeSeasonNumber ? 'active' : ''}"
-                     onclick="event.preventDefault(); switchSeason(${anime.id}, ${s.number}, this)">
-                     Сезон ${s.number}
-                  </a>
-                `).join('')}
+        container.innerHTML = `
+          <div class="anime-item expanded">
+            <div class="details">
+              <div class="dropdown">
+                <div class="dropdown-header" onclick="this.parentNode.classList.toggle('open')">Сезони</div>
+                <div class="dropdown-content" id="seasonLinks">
+                  ${anime.seasons.map(s => `
+                    <a href="#" data-season="${s.number}" class="${s.number === activeSeasonNumber ? 'active' : ''}"
+                       onclick="event.preventDefault(); switchSeason(${anime.id}, ${s.number}, this)">
+                       Сезон ${s.number}
+                    </a>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+
+            <div class="anime-summary">
+              <img src="http://localhost:8000/poster/${season.file_id}" class="poster" alt="Poster">
+              <div class="info">
+                ${badgeHTML}
+                <div class="title">${anime.title} ${season.number} сезон</div>
+                <div class="subtitle">${anime.title_en} ${season.number} season</div>
+                <div class="meta">
+                  <div><strong>Жанр:</strong> ${season.genre}</div>
+                  <div><strong>Кількість серій:</strong> ${season.episodes}</div>
+                  <div><strong>Рік:</strong> ${season.year}</div>
+                </div>
+              </div>
+            </div>
+            <div class="anime-actions">
+              <button id="watchedBtn" class="action-btn">Переглянуто</button>
+              <button id="plannedBtn" class="action-btn">На потім</button>
+            </div>
+            <div class="details">
+
+              <div class="description">${season.description}</div>
+
+              <div class="dropdown">
+                <div class="dropdown-header" onclick="this.parentNode.classList.toggle('open')">Серії</div>
+                <div class="dropdown-content" id="episodes">
+                  ${season.episodeLinks.map(e => `<a href="${e.url}">${e.title}</a>`).join('')}
+                </div>
               </div>
             </div>
           </div>
-
-          <div class="anime-summary">
-            <img src="http://localhost:8000/poster/${season.file_id}" class="poster" alt="Poster">
-            <div class="info">
-              ${badgeHTML}
-              <div class="title">${anime.title} ${season.number} сезон</div>
-              <div class="subtitle">${anime.title_en} ${season.number} season</div>
-              <div class="meta">
-                <div><strong>Жанр:</strong> ${season.genre}</div>
-                <div><strong>Кількість серій:</strong> ${season.episodes}</div>
-                <div><strong>Рік:</strong> ${season.year}</div>
-              </div>
-            </div>
-          </div>
-          <div class="details">
+        `;
+      } else if (anime.type === "movie") {
+        container.innerHTML = `
+          <div class="anime-item expanded">
             
-            <div class="description">${season.description}</div>
-            
-            <div class="dropdown">
-              <div class="dropdown-header" onclick="this.parentNode.classList.toggle('open')">Серії</div>
-              <div class="dropdown-content" id="episodes">
-                ${season.episodeLinks.map(e => `<a href="${e.url}">${e.title}</a>`).join('')}
+            <div class="anime-summary">
+              <img src="http://localhost:8000/poster/${anime.file_id}" class="poster" alt="Poster">
+              <div class="info">
+                <div class="title">${anime.title}</div>
+                <div class="subtitle">${anime.title_en}</div>
+                <div class="meta">
+                  <div><strong>Жанр:</strong> ${anime.genre}</div>
+                  <div><strong>Рік:</strong> ${anime.year}</div>
+                </div>
               </div>
             </div>
+            <div class="anime-actions">
+              <button id="watchedBtn" class="action-btn">Переглянуто</button>
+              <button id="plannedBtn" class="action-btn">На потім</button>
+            </div>
+            <div class="details">
+              <div></div>
+              <div class="description">${anime.description}</div>
+
+              <a href="${anime.episodeLink}" class="back-btn">Дивитися</a>
+            </div>
           </div>
-        </div>
-      `;
+        `;
+      }
     }
+
+    const watchedBtn = document.getElementById('watchedBtn');
+    const plannedBtn = document.getElementById('plannedBtn');
+
+    // Завантаження поточного стану (опціонально)
+    fetch(`http://localhost:8000/user_status/${userId}/${anime.id}`)
+      .then(res => res.json())
+      .then(status => {
+        if (status.watched) watchedBtn.classList.add('active');
+        if (status.planned) plannedBtn.classList.add('active');
+      });
+    
+    // Обробник натискання
+    watchedBtn.addEventListener('click', () => toggleStatus(anime.id, 'watched', watchedBtn));
+    plannedBtn.addEventListener('click', () => toggleStatus(anime.id, 'planned', plannedBtn));
+
 
     function switchSeason(animeId, seasonNumber, element) {
       fetch(`http://localhost:8000/anime_id/${animeId}`)
@@ -246,6 +320,31 @@
     }
 
     document.addEventListener('DOMContentLoaded', loadAnime);
+  
+  function toggleStatus(animeId, statusType, button) {
+    const isActive = button.classList.contains('active');
+    const action = isActive ? 'remove' : 'add';
+
+    fetch(`http://localhost:8000/user_anime_status`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user_id: userId,
+        anime_id: animeId,
+        status: statusType,
+        action: action
+      })
+    }).then(res => {
+      if (res.ok) {
+        button.classList.toggle('active');
+      } else {
+        alert("Помилка при оновленні статусу");
+      }
+    });
+  }
+
   </script>
 </body>
 </html>
