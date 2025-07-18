@@ -187,12 +187,10 @@
 
   <script>
 
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-    let user_id = tg.initDataUnsafe?.user?.id
 
     const container = document.getElementById('animeView');
     const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get("user_id");
     const id = urlParams.get("id");
 
     async function loadAnime() {

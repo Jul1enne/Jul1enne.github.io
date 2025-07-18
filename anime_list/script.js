@@ -1,29 +1,17 @@
 
 let userId = null;
-// Дочекаємось завантаження DOM
-document.addEventListener('DOMContentLoaded', () => {
-  // Перевіряємо наявність Telegram WebApp
-  if (window.Telegram && window.Telegram.WebApp) {
-    const tg = window.Telegram.WebApp;
-
-    // Запускаємо WebApp (встановлює ініціалізацію)
-    tg.ready();
-
-    // Після ready — можна безпечно отримати initDataUnsafe
-    const tgUser = tg.initDataUnsafe?.user;
-
-    if (tgUser) {
-      userId = tgUser.id;
-      console.log("User ID:", userId);
-    } else {
-      console.warn("Користувач не авторизований або user = null");
-    }
+if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe) {
+  const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
+  if (tgUser) {
+    userId = tgUser.id;
+    console.log("User ID:", userId);
   } else {
-    // Якщо Telegram API не доступний — фейковий ID для тесту
-    userId = 12312312312;
-    console.warn("Telegram WebApp API не доступний");
+    console.warn("Користувач не авторизований");
   }
-});
+} else {
+  userId = 12312312312;
+  console.warn("Telegram WebApp API не доступний");
+}
 
 const urlParams = new URLSearchParams(window.location.search);
 const filter = urlParams.get("filter") || "all";
@@ -36,7 +24,7 @@ async function fetchAnimeList() {
   if (filter === "watched") {
     url = `http://localhost:8000/watched_anime_list?user_id=${userId}`;
   } else if (filter === "watch") {
-    url = `http://localhost:8000/watch_anime_list?user_id=${userId}`;
+    url = `http://localhost:8000/planned_anime_list?user_id=${userId}`;
   } else if (filter === "planned") {
     url = `http://localhost:8000/planned_anime_list?user_id=${userId}`;
   }
@@ -95,7 +83,7 @@ async function renderAnimePage(page) {
           </div>
         </div>
         <div class="details" id="details-${anime.id}">
-          <a href="anime.html?id=${anime.id}" class="collapse-btn">Перейти</a>
+          <a href="anime.html?id=${anime.id}?user_id=${userId}" class="collapse-btn">Перейти</a>
         </div>
       `;
     } else {
@@ -116,7 +104,7 @@ async function renderAnimePage(page) {
           </div>
         </div>
         <div class="details" id="details-${anime.id}">
-          <a href="anime.html?id=${anime.id}" class="collapse-btn">Перейти</a>
+          <a href="anime.html?id=${anime.id}?user_id=${userId}" class="collapse-btn">Перейти</a>
         </div>
       `;
     }
