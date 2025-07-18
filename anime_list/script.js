@@ -1,21 +1,8 @@
 
-let userId = null;
-if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe) {
-  const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
-  if (tgUser) {
-    userId = tgUser.id;
-    console.log("User ID:", userId);
-  } else {
-    console.warn("Користувач не авторизований");
-  }
-} else {
-  userId = 12312312312;
-  console.warn("Telegram WebApp API не доступний");
-}
 
 const urlParams = new URLSearchParams(window.location.search);
 const filter = urlParams.get("filter") || "all";
-
+const userId = urlParams.get("user_id")|| 123;
 
 // API-запит на отримання списку аніме
 async function fetchAnimeList() {
