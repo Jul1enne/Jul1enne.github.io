@@ -72,7 +72,7 @@ async function renderAnimePage(page) {
           </div>
         </div>
         <div class="details" id="details-${anime.id}">
-          <a href="anime.html?id=${anime.id}&userId=${userId}" class="collapse-btn">Перейти</a>
+          <a href="anime.html?id=${anime.id}&userId=${String(userId)}" class="collapse-btn">Перейти</a>
         </div>
       `;
     } else {
@@ -93,7 +93,7 @@ async function renderAnimePage(page) {
           </div>
         </div>
         <div class="details" id="details-${anime.id}">
-          <a href="anime.html?id=${anime.id}&userId=${userId}" class="collapse-btn">Перейти</a>
+          <a href="anime.html?id=${anime.id}&userId=${String(userId)}" class="collapse-btn">Перейти</a>
         </div>
       `;
     }
