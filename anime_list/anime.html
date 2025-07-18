@@ -180,29 +180,26 @@
 </head>
 <body>
   <div class="wrapper">
+    <div id="debug" style="color: white; background: #222; padding: 10px;"></div>
     <a href="index.html" id="backToListBtn" class="back-btn">Список аніме</a>
     <div id="animeView">Завантаження...</div>
   </div>
 
   <script>
-    let userId = null;
 
     // Дочекаємось завантаження DOM
-    window.addEventListener("DOMContentLoaded", () => {
-      const tg = window.Telegram.WebApp;
-        
-      tg.ready(); // Офіційна рекомендація Telegram
-      tg.expand();
-        
-      const tgUser = tg.initDataUnsafe?.user;
-        
-      if (tgUser) {
-        const userId = tgUser.id;
-        console.log("User ID:", userId);
-      } else {
-        console.warn("Користувач не авторизований або Telegram WebApp API не повернув user");
-      }
-    });
+    const debug = document.getElementById("debug");
+
+    const tg = window.Telegram?.WebApp;
+    tg?.ready();
+
+    let userId = tg?.initDataUnsafe?.user?.id;
+
+    if (userId) {
+      debug.textContent = "User ID: " + userId;
+    } else {
+      debug.textContent = "User ID не знайдено (ймовірно, WebApp відкритий не через Telegram)";
+    }
 
     const container = document.getElementById('animeView');
     const urlParams = new URLSearchParams(window.location.search);
