@@ -1,17 +1,29 @@
 
 let userId = null;
-if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe) {
-  const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
-  if (tgUser) {
-    userId = tgUser.id;
-    console.log("User ID:", userId);
+// Дочекаємось завантаження DOM
+document.addEventListener('DOMContentLoaded', () => {
+  // Перевіряємо наявність Telegram WebApp
+  if (window.Telegram && window.Telegram.WebApp) {
+    const tg = window.Telegram.WebApp;
+
+    // Запускаємо WebApp (встановлює ініціалізацію)
+    tg.ready();
+
+    // Після ready — можна безпечно отримати initDataUnsafe
+    const tgUser = tg.initDataUnsafe?.user;
+
+    if (tgUser) {
+      userId = tgUser.id;
+      console.log("User ID:", userId);
+    } else {
+      console.warn("Користувач не авторизований або user = null");
+    }
   } else {
-    console.warn("Користувач не авторизований");
+    // Якщо Telegram API не доступний — фейковий ID для тесту
+    userId = 12312312312;
+    console.warn("Telegram WebApp API не доступний");
   }
-} else {
-  userId = 12312312312;
-  console.warn("Telegram WebApp API не доступний");
-}
+});
 
 const urlParams = new URLSearchParams(window.location.search);
 const filter = urlParams.get("filter") || "all";
