@@ -2,7 +2,7 @@
 
 const urlParams = new URLSearchParams(window.location.search);
 const filter = urlParams.get("filter") || "all";
-const userId = urlParams.get("user_id")|| 123;
+const userId = urlParams.get("userId") || 123;
 
 // API-запит на отримання списку аніме
 async function fetchAnimeList() {
