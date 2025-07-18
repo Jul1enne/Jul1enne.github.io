@@ -2,7 +2,7 @@
 
 const urlParams = new URLSearchParams(window.location.search);
 const filter = urlParams.get("filter") || "all";
-const userId = urlParams.get("userId") || 123;
+const userId = parseInt(urlParams.get("userId")) || 123;
 
 alert(userId)
 
