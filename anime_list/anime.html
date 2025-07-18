@@ -192,9 +192,7 @@
       // Перевіряємо наявність Telegram WebApp
       if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
-      
-        // Запускаємо WebApp (встановлює ініціалізацію)
-        tg.ready();
+        tg.expand();
       
         // Після ready — можна безпечно отримати initDataUnsafe
         const tgUser = tg.initDataUnsafe?.user;
