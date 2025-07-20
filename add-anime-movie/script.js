@@ -10,21 +10,30 @@ function switchTab(tab) {
 
 function sendMovie() {
     const voicers = Array.from(document.querySelectorAll('input[name="voicers"]:checked')).map(cb => cb.value);
+    const translators = Array.from(document.querySelectorAll('input[name="translators"]:checked')).map(cb => cb.value);
+    const sounds = Array.from(document.querySelectorAll('input[name="sounds"]:checked')).map(cb => cb.value);
 
     const data = {
         type: 'movie',
         user_id: tg.initDataUnsafe?.user?.id,
-        title_ua: document.getElementById('title_ua').value,
-        title_en: document.getElementById('title_en').value,
+        title_ua: document.getElementById('title_ua').value.trim(),
+        title_en: document.getElementById('title_en').value.trim(),
         year: document.getElementById('year').value,
-        genre: document.getElementById('genres').value,
-        director: document.getElementById('director').value,
-        studio_publisher: document.getElementById('studio_publisher').value,
-        description: document.getElementById('description').value,
+        genre: document.getElementById('genres').value.trim(),
+        director: document.getElementById('director').value.trim(),
+        studio_publisher: document.getElementById('studio_publisher').value.trim(),
+        description: document.getElementById('description').value.trim(),
+
         voiced_by: voicers,
-        sound: document.getElementById('sound').value,
-        tag: document.getElementById('tag').value,
+        any_voiced_by: document.getElementById('any_voiced_by').value.trim(),
+        translated_by: translators,
+        any_translated_by: document.getElementById('any_translated_by').value.trim(),
+        sounds: sounds,
+        any_sound_by: document.getElementById('any_sound_by').value.trim(),
+
+        tag: document.getElementById('tag').value.trim(),
         include_sound: document.getElementById('include_sound_switch')?.checked ?? true,
+        include_translator: document.getElementById('include_translator_switch')?.checked ?? true,
     };
 
     fetch("http://localhost:8000/submit_movie", {
@@ -75,3 +84,52 @@ fetch("http://localhost:8000/voicers")
             voicedContainer.appendChild(wrapper);
         });
     });
+
+// Завантаження звукарів
+fetch("http://localhost:8000/sounds")
+    .then(res => res.json())
+    .then(sounders => {
+        const soundContainer = document.getElementById("sound_by_container");
+
+        sounders.forEach(sounder => {
+            const name = typeof sounder === "string" ? sounder : sounder.name;
+
+            const wrapper = document.createElement("div");
+            wrapper.className = "switch-wrapper";
+            wrapper.innerHTML = `
+                <label class="switch-label">
+                    <label class="switch">
+                        <input type="checkbox" name="sounds" value="${name}">
+                        <span class="slider"></span>
+                    </label>
+                    ${name}
+                </label>
+            `;
+            soundContainer.appendChild(wrapper);
+        });
+    });
+
+// Завантаження звукарів
+fetch("http://localhost:8000/translators")
+    .then(res => res.json())
+    .then(translators => {
+        const translatedContainer = document.getElementById(`translated_by_container`);
+
+        translators.forEach(translator => {
+            const name = typeof translator === "string" ? translator : translator.name;
+            const wrapper = document.createElement("div");
+            wrapper.className = "switch-wrapper";
+            wrapper.innerHTML = `
+                <label class="switch-label">
+                    <label class="switch">
+                        <input type="checkbox" name="translators" value="${name}">
+                        <span class="slider"></span>
+                    </label>
+                    ${name}
+                </label>
+            `;
+            translatedContainer.appendChild(wrapper);
+        });
+    });
+
+

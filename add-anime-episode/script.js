@@ -71,6 +71,8 @@ fetch("http://localhost:8000/voicers")
     .then(voicers => {
         ["episode", "ova", "special"].forEach(prefix => {
             const container = document.getElementById(`voiced_by_container_${prefix}`);
+            if (!container) return;
+
             voicers.forEach(voicer => {
                 const name = typeof voicer === "string" ? voicer : voicer.name;
                 const wrapper = document.createElement("div");
@@ -87,7 +89,8 @@ fetch("http://localhost:8000/voicers")
                 container.appendChild(wrapper);
             });
         });
-    });
+    })
+    .catch(error => console.error("Voicers fetch error:", error));
 
 // Завантаження звукарів
 fetch("http://localhost:8000/sounds")

@@ -179,6 +179,7 @@
       <div id="add_title" class="form">
         <div class="section-title">Параметри аніме</div>
         <div class="form-group"><input id="title_name" placeholder="Назва"></div>
+        <div class="form-group"><input id="title_name_en" placeholder="Назва англійською"></div>
         <div class="row">
           <div class="form-group"><input id="title_season" type="number" placeholder="Сезон"></div>
           <div class="form-group"><input id="title_episodes_count" type="number" placeholder="Скільки серій в сезоні"></div>
@@ -192,7 +193,6 @@
         <div class="form-group"><textarea id="title_description" placeholder="Опис"></textarea></div>
 
         <div class="section-title">Додатково</div>
-        <div class="form-group"><input id="title_sound" placeholder="Робота зі звуком"></div>
         <div class="form-group"><input id="title_tag" placeholder="Тег"></div>
         
         <div class="section-title" s>Налаштування</div>
@@ -238,9 +238,6 @@
         <div class="form-group"><textarea id="season-description" placeholder="Опис"></textarea></div>
 
         <div class="section-title">Опис</div>
-        <div class="form-group">
-          <input id="season_sound" placeholder="Робота зі звуком">
-        </div>
 
         <div class="section-title" s>Налаштування</div>
         <div class="input-like-box">
@@ -276,19 +273,19 @@
     function sendTitle() {
       const data = {
         user_id: tg.initDataUnsafe?.user?.id,
-        name: document.getElementById('title_name')?.value,
+        name: document.getElementById('title_name')?.value.trim(),
+        name_en: document.getElementById('title_name')?.value.trim(),
         season: document.getElementById('title_season')?.value,
         episodes_count: document.getElementById('title_episodes_count')?.value,
 
         release_year: document.getElementById('title_release_year')?.value,
-        ganre: document.getElementById('title_ganre')?.value,
-        director: document.getElementById('title-director')?.value,
-        studio_publisher: document.getElementById('title-studio_publisher')?.value,
-        description: document.getElementById('title_description')?.value,
+        ganre: document.getElementById('title_ganre')?.value.trim(),
+        director: document.getElementById('title-director')?.value.trim(),
+        studio_publisher: document.getElementById('title-studio_publisher')?.value.trim(),
+        description: document.getElementById('title_description')?.value.trim(),
 
-        sound: document.getElementById('title_sound')?.value,
         include_season_num: document.getElementById('title_include_season_num')?.checked ?? true,
-        tag: document.getElementById('title_tag')?.value,
+        tag: document.getElementById('title_tag')?.value.trim(),
       };
 
       fetch("http://localhost:8000/submit_title", {
@@ -313,12 +310,11 @@
         episodes_count: document.getElementById('season_episodes_count')?.value,
 
         release_year: document.getElementById('season_release_year')?.value,
-        ganre: document.getElementById('season_ganre')?.value,
-        director: document.getElementById('season-director')?.value,
-        studio_publisher: document.getElementById('season-studio_publisher')?.value,
-        description: document.getElementById('season_description')?.value,
+        ganre: document.getElementById('season_ganre')?.value.trim(),
+        director: document.getElementById('season-director')?.value.trim(),
+        studio_publisher: document.getElementById('season-studio_publisher')?.value.trim(),
+        description: document.getElementById('season_description')?.value.trim(),
 
-        sound: document.getElementById('season_sound')?.value,
         include_season_num: document.getElementById('season_include_season_num')?.checked ?? true,
         tag: select?.value,
       };

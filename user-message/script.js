@@ -1,11 +1,12 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
 
+const userId = urlParams.get("userId") || null;
+const username = urlParams.get("username") || null;
+
 document.getElementById('sendBtn').addEventListener('click', () => {
   const message = document.getElementById("message").value.trim();
   const anonymous = document.getElementById("anonSwitch")?.checked ?? false;
-  const userId = tg.initDataUnsafe?.user?.id;
-  const username = tg.initDataUnsafe?.user?.username;
 
   if (!message) {
     alert("Введіть повідомлення.");
