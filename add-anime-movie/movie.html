@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Movie Form</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('movie')">Новий фільм</div>
+        </div>
+
+        <div class="form-container" style="border-radius: 0 0 10px 10px;">
+            <div id="movie" class="form">
+                <div class="section-title">Основна інформація</div>
+
+                <div class="form-group"><input id="title_ua" placeholder="Назва українською"></div>
+                <div class="form-group"><input id="title_en" placeholder="Назва англійською"></div>
+                
+                <div class="section-title">Опис фільму</div>
+                <div class="form-group"><input id="year" type="number" placeholder="Рік випуску"></div>
+                <div class="form-group"><input id="genres" placeholder="Жанри"></div>
+                <div class="form-group"><input id="director" placeholder="Режисер"></div>
+                <div class="form-group"><input id="studio_publisher" placeholder="Студія видавець"></div>
+
+                <div class="form-group"><textarea id="description" placeholder="Опис фільму"></textarea></div>
+
+                <div class="section-title">Додатково</div>
+                <div class="input-like-box">
+                    <div class="sub-section-title">Хто озвучував</div>
+                    <div class="form-group" id="voiced_by_container"></div>
+                </div>
+                <div class="form-group"><input id="sound" placeholder="Робота зі звуком"></div>
+                <div class="form-group"><input id="tag" placeholder="Тег"></div>
+
+                <div class="section-title">Налаштування</div>
+                <div class="input-like-box">
+                    <div class="form-group setting-3">
+                        <label class="switch-label">
+                            <label class="switch">
+                                <input type="checkbox" id="include_sound_switch" checked>
+                                <span class="slider"></span>
+                            </label>
+                            Додати пункт "Робота зі звуком"
+                        </label>
+                    </div>
+                    
+                </div>
+
+                <div class="submit-button">
+                    <button onclick="sendMovie()">Відправити</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
