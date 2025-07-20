@@ -1,6 +1,7 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
 
+const urlParams = new URLSearchParams(window.location.search);
 const userId = urlParams.get("userId") || null;
 const username = urlParams.get("username") || null;
 
