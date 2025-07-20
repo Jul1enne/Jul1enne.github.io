@@ -17,7 +17,6 @@ document.getElementById('sendBtn').addEventListener('click', () => {
   })
     .then(res => res.json())
     .then(data => {
-      alert("Повідомлення надіслано!");
       tg.close();
     })
     .catch(err => {
