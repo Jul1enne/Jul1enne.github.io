@@ -4,7 +4,291 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Команда</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: #1e1e1e;
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+    }
+
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .anime-item {
+      background-color: #2c2c2e;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+
+    .anime-summary {
+      display: flex;
+      flex-wrap: nowrap;
+      padding: 12px;
+      align-items: flex-start;
+    }
+
+    .poster {
+      width: 25%;
+      max-width: 25%;
+      height: auto;
+      aspect-ratio: 2 / 3;
+      border-radius: 10px;
+      margin-right: 12px;
+    }
+
+    .info {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-left: 8px;
+    }
+
+    .anime-item .title {
+      font-weight: bold;
+      font-size: 28px; /* збільшено */
+      word-break: break-word;
+      white-space: normal;
+    }
+
+    .anime-item .status {
+      font-size: 22px;
+      color: #aaa;
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    /* Опис в згорнутому стані (до 5 рядків) */
+    .anime-item:not(.expanded) .description {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 5;
+      line-clamp: 5;
+    }
+
+    /* Опис в розгорнутому стані — повністю */
+    .anime-item.expanded .description {
+      max-height: none;
+      overflow: visible;
+      -webkit-line-clamp: unset;
+      line-clamp: unset;
+    }
+
+    .details {
+      display: none;
+      padding: 12px;
+      border-top: 1px solid #3a3a3c;
+    }
+
+    .anime-item.expanded .details {
+      display: block;
+    }
+
+    .dropdown {
+      background-color: #343436;
+      border-radius: 10px;
+      margin-top: 12px;
+      overflow: hidden;
+    }
+
+    .dropdown-header {
+      padding: 14px;
+      cursor: pointer;
+      font-weight: bold;
+      background-color: #3a3a3c;
+    }
+
+    .dropdown-content {
+      display: none;
+      flex-wrap: wrap;
+      padding: 10px;
+      gap: 8px;
+    }
+
+    .dropdown.open .dropdown-content {
+      display: flex;
+    }
+
+    .dropdown-content a {
+      background-color: #588273;
+      text-decoration: none;
+      color: white;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 16px;
+    }
+
+    .collapse-btn {
+      display: inline-block;
+      text-align: center;
+      text-decoration: none;
+      margin-top: 12px;
+      background-color: #588273;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 10px;
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      padding: 12px 0;
+    }
+
+    .page-btn {
+      background-color: #2c2c2e;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      margin: 0 4px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+
+    .meta-block {
+      font-size: 16px;
+      color: #ddd;
+      line-height: 1.4;
+      margin-top: 6px;
+    }
+
+    .badge {
+      background-color: #F2A44C;
+      color: #3a3a3c;
+      font-weight: bold;
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      display: inline-block;
+      margin-bottom: 6px;
+      align-self: flex-start;
+    }
+
+    .anime-card.empty-card {
+      background-color: #2b2b2d;
+      border: 2px dashed #444;
+      border-radius: 16px;
+      padding: 24px;
+      margin: 20px;
+      color: #ccc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      opacity: 0.8;
+      box-shadow: 0 0 8px rgba(0,0,0,0.3);
+    }
+
+    .anime-card.empty-card .anime-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .anime-card.empty-card .anime-subtext {
+      font-size: 16px;
+      color: #aaa;
+    }
+
+    .filter-btn {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 10px;
+      background-color: #3a3a3c;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .filter-btn.active {
+      background-color: #F2A44C;
+      color: #3a3a3c;
+      font-weight: bold;
+    }
+
+    .filters-wrapper {
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .filter-row .filter-btn {
+      flex: 1;
+    }
+
+    .full-width {
+      width: 100%;
+    }
+
+    .loading-indicator {
+      text-align: center;
+      padding: 40px;
+      font-size: 18px;
+      color: #ccc;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    .loading-indicator.hidden {
+      opacity: 0;
+      pointer-events: none;
+      height: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .loading-card {
+      background-color: #2c2c2e;
+      border-radius: 16px;
+      padding: 24px;
+      margin: 20px 0;
+      color: #ccc;
+      text-align: center;
+      font-size: 18px;
+      opacity: 0.9;
+      box-shadow: 0 0 8px rgba(0,0,0,0.3);
+    }
+  </style>
 </head>
 <body>
   <div class="wrapper">
@@ -33,6 +317,7 @@
 
     function renderTeam(users) {
       const container = document.getElementById("teamContainer");
+      container.innerHTML = "";
       if (!users.length) {
         container.innerHTML = `<div class="anime-card empty-card">Список учасників порожній.</div>`;
         return;
@@ -44,8 +329,10 @@
         item.innerHTML = `
           <div class="anime-summary" style="cursor: pointer">
             <div class="info">
-              <div class="title">${user.username}</div>
-              <div class="subtitle">Статус: ${user.status}</div>
+              <div class="user-row">
+                <div class="title">${user.username}</div>
+                <div class="status">${user.status}</div>
+              </div>
             </div>
           </div>
         `;
