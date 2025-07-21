@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Команда</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrapper">
+    <div id="teamContainer"></div>
+
+    <div class="loading-indicator hidden" id="loadingIndicator">
+      <div class="loading-card">Завантаження команди...</div>
+    </div>
+  </div>
+
+  <script>
+    async function fetchTeam() {
+      const loading = document.getElementById("loadingIndicator");
+      loading.classList.remove("hidden");
+      try {
+        const res = await fetch("http://localhost:8000/team-members");
+        if (!res.ok) throw new Error("Помилка запиту");
+        return await res.json();
+      } catch (err) {
+        console.error("Помилка при завантаженні команди:", err);
+        return [];
+      } finally {
+        loading.classList.add("hidden");
+      }
+    }
+
+    function renderTeam(users) {
+      const container = document.getElementById("teamContainer");
+      if (!users.length) {
+        container.innerHTML = `<div class="anime-card empty-card">Список учасників порожній.</div>`;
+        return;
+      }
+
+      users.forEach(user => {
+        const item = document.createElement("div");
+        item.className = "anime-item";
+        item.innerHTML = `
+          <div class="anime-summary" style="cursor: pointer">
+            <div class="info">
+              <div class="title">${user.username}</div>
+              <div class="subtitle">Статус: ${user.status}</div>
+            </div>
+          </div>
+        `;
+
+        item.addEventListener("click", () => {
+          window.location.href = `member.html?id=${user.user_id}`;
+        });
+
+        container.appendChild(item);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      const users = await fetchTeam();
+      renderTeam(users);
+    });
+  </script>
+</body>
+</html>

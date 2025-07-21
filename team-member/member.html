@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Профіль учасника</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      background-color: #1c1c1c;
+      color: white;
+      display: flex;
+      justify-content: center;
+    }
+
+    .wrapper {
+      width: 90%;
+      max-width: 600px;
+      padding: 20px;
+    }
+
+    .back-btn {
+      display: block;
+      background-color: #588273;
+      color: white;
+      text-align: center;
+      padding: 12px;
+      border-radius: 12px;
+      text-decoration: none;
+      margin-bottom: 20px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .user-card {
+      background-color: #2b2b2b;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+      text-align: center; /* Центруємо текст */
+    }
+
+    .username {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .status {
+      font-size: 16px;
+      margin-bottom: 30px; /* Відступ між статусом і кнопками */
+      color: #ccc;
+    }
+
+    .role-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: stretch; /* Кнопки на всю ширину блоку */
+    }
+
+    .role-btn {
+      background-color: #444;
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+      transition: background-color 0.2s ease;
+    }
+
+    .role-btn.active {
+      background-color: #F2A44C;
+      color: black;
+      font-weight: bold;
+    }
+
+    .role-btn:hover {
+      background-color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <a href="team.html" class="back-btn">Назад до списку</a>
+    <div class="user-card" id="userCard">
+      Завантаження...
+    </div>
+  </div>
+
+  <script>
+    const userId = new URLSearchParams(window.location.search).get("id");
+
+    async function fetchUser(id) {
+      try {
+        const res = await fetch(`http://localhost:8000/team-member/${id}`);
+        if (!res.ok) throw new Error("Не вдалося завантажити користувача");
+        return await res.json();
+      } catch (err) {
+        console.error(err);
+        return null;
+      }
+    }
+
+    function createButton(label, key, active, onClick) {
+      const btn = document.createElement("button");
+      btn.className = "role-btn" + (active ? " active" : "");
+      btn.textContent = label;
+      btn.addEventListener("click", () => onClick(key));
+      return btn;
+    }
+
+    function renderUser(user) {
+      const container = document.getElementById("userCard");
+      if (!user) {
+        container.innerHTML = "Користувача не знайдено.";
+        return;
+      }
+
+      container.innerHTML = "";
+
+      const usernameEl = document.createElement("div");
+      usernameEl.className = "username";
+      usernameEl.textContent = user.username;
+
+      const statusEl = document.createElement("div");
+      statusEl.className = "status";
+      statusEl.textContent = `Статус: ${user.status}`;
+
+      const btnsEl = document.createElement("div");
+      btnsEl.className = "role-btns";
+
+      const roles = {
+        dubber: user.dubber,
+        translator: user.translator,
+        sound: user.sound,
+      };
+
+      const toggleRole = async (role) => {
+        roles[role] = !roles[role];
+        updateUI();
+
+        await fetch(`http://localhost:8000/update-member-status`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user_id: user.user_id,
+            dubber: roles.dubber,
+            translator: roles.translator,
+            sound: roles.sound,
+          }),
+        });
+      };
+
+      const updateUI = () => {
+        btnsEl.innerHTML = "";
+        btnsEl.appendChild(createButton("Дубляж", "dubber", roles.dubber, toggleRole));
+        btnsEl.appendChild(createButton("Переклад", "translator", roles.translator, toggleRole));
+        btnsEl.appendChild(createButton("Звук", "sound", roles.sound, toggleRole));
+      };
+
+      updateUI();
+
+      container.appendChild(usernameEl);
+      container.appendChild(statusEl);
+      container.appendChild(btnsEl);
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      const user = await fetchUser(userId);
+      renderUser(user);
+    });
+  </script>
+</body>
+</html>
