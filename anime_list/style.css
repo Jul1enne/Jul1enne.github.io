@@ -76,12 +76,19 @@ html, body {
 }
 
 .details {
-  display: none;
-  padding: 0 12px 12px 12px;
-  border-top: 1px solid #3a3a3c;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  padding: 0 12px;
+  border-top: 1px solid transparent;
+  transition: max-height 0.2s ease, opacity 0.2s ease, padding 0.2s ease, border-top-color 0.2s ease;
 }
+
 .anime-item.expanded .details {
-  display: block;
+  max-height: 1000px; /* достатньо велике, щоб вміст помістився */
+  opacity: 1;
+  padding: 0 12px 12px 12px;
+  border-top-color: #3a3a3c;
 }
 
 .dropdown {

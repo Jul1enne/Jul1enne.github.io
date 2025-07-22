@@ -78,7 +78,7 @@ async function renderAnimePage(page) {
           </div>
         </div>
         <div class="details" id="details-${anime.id}">
-          <a href="anime.html?id=${anime.id}&userId=${String(userId)}&filter=${filter}&page=${currentPage}" class="collapse-btn">Перейти</a>
+          <a href="..." class="collapse-btn">Перейти</a>
         </div>
       `;
     } else if (anime.type === "series") {
@@ -97,7 +97,7 @@ async function renderAnimePage(page) {
           </div>
         </div>
         <div class="details" id="details-${anime.id}">
-          <a href="anime.html?id=${anime.id}&userId=${String(userId)}&filter=${filter}&page=${currentPage}" class="collapse-btn">Перейти</a>
+          <a href="..." class="collapse-btn">Перейти</a>
         </div>
       `;
     }
@@ -106,18 +106,20 @@ async function renderAnimePage(page) {
 
     item.querySelector(".anime-summary").addEventListener("click", () => {
       localStorage.setItem('animeListReturnUrl', window.location.href);
+
       document.querySelectorAll(".anime-item.expanded").forEach(el => {
         if (el !== item) el.classList.remove("expanded");
       });
+    
       item.classList.toggle("expanded");
     });
 
-    container.appendChild(item);
-  }
-
-  const totalPages = Math.ceil(animeList.length / MAX_PER_PAGE);
-  renderPagination(totalPages, page);
-}
+        container.appendChild(item);
+      }
+    
+      const totalPages = Math.ceil(animeList.length / MAX_PER_PAGE);
+      renderPagination(totalPages, page);
+    }
 
 
 
