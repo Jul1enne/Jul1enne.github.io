@@ -77,7 +77,7 @@ html, body {
 
 .details {
   display: none;
-  padding: 12px;
+  padding: 0 12px 12px 12px;
   border-top: 1px solid #3a3a3c;
 }
 .anime-item.expanded .details {
