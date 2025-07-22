@@ -119,6 +119,8 @@ async function renderAnimePage(page) {
   renderPagination(totalPages, page);
 }
 
+
+
 function renderPagination(totalPages, currentPage) {
   const pagination = document.getElementById("pagination");
   pagination.innerHTML = "";
@@ -243,3 +245,5 @@ document.addEventListener("DOMContentLoaded", () => {
   setActiveFilter(filter);
   loadAndRenderAnime();
 });
+
+

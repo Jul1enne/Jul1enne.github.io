@@ -214,7 +214,7 @@ html, body {
   border-radius: 10px;
   background-color: #3a3a3c;
   color: white;
-  font-size: 1rem;
+  font-size: 16px;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
@@ -276,4 +276,210 @@ html, body {
 
 .hidden {
   display: none;
+}
+
+@media (max-width: 480px) {
+  html, body {
+    font-size: 14px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+  }
+
+  .meta-block, .meta {
+    font-size: 14px;
+  }
+
+  .dropdown-content a {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  .collapse-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .badge {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+
+  .anime-card.empty-card .anime-title {
+    font-size: 18px;
+  }
+
+  .anime-card.empty-card .anime-subtext {
+    font-size: 14px;
+  }
+
+  .filter-btn {
+    font-size: 14px;
+    padding: 10px 14px;
+  }
+
+  .loading-indicator,
+  .loading-card {
+    font-size: 14px;
+    padding: 26px;
+  }
+
+  .page-btn {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 420px) {
+  html, body {
+    font-size: 13px;
+  }
+
+  .title {
+    font-size: 16px;
+  }
+
+  .subtitle {
+    font-size: 11px;
+  }
+
+  .meta-block, .meta {
+    font-size: 13px;
+  }
+
+  .dropdown-content a {
+    font-size: 13px;
+    padding: 5px 8px;
+  }
+
+  .collapse-btn {
+    font-size: 13px;
+    padding: 9px;
+  }
+
+  .badge {
+    font-size: 12.5px;
+    padding: 5px 10px;
+  }
+
+  .anime-card.empty-card .anime-title {
+    font-size: 17px;
+  }
+
+  .anime-card.empty-card .anime-subtext {
+    font-size: 13px;
+  }
+
+  .filter-btn {
+    font-size: 13px;
+    padding: 9px 13px;
+  }
+
+  .loading-indicator,
+  .loading-card {
+    font-size: 13px;
+    padding: 24px;
+  }
+
+  .page-btn {
+    font-size: 13px;
+    padding: 7px 10px;
+  }
+}
+
+@media (max-width: 380px) {
+  html, body {
+    font-size: 12.5px;
+  }
+
+  .title {
+    font-size: 15px;
+  }
+
+  .subtitle {
+    font-size: 10px;
+  }
+
+  .meta-block, .meta {
+    font-size: 12.5px;
+  }
+
+  .dropdown-content a {
+    font-size: 12.5px;
+    padding: 5px 7px;
+  }
+
+  .collapse-btn {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .badge {
+    font-size: 12px;
+    padding: 5px 9px;
+  }
+
+  .anime-card.empty-card .anime-title {
+    font-size: 16px;
+  }
+
+  .anime-card.empty-card .anime-subtext {
+    font-size: 12.5px;
+  }
+
+  .filter-btn {
+    font-size: 12.5px;
+    padding: 8px 12px;
+  }
+
+  .loading-indicator,
+  .loading-card {
+    font-size: 12.5px;
+    padding: 20px;
+  }
+
+  .page-btn {
+    font-size: 12.5px;
+    padding: 6px 9px;
+  }
+}
+
+
+.anime-item,
+.anime-item .collapse-btn,
+.filter-btn,
+.page-btn,
+.dropdown-content a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Якщо хочеш додати для будь-яких кнопок і посилань у wrapper */
+.wrapper button,
+.wrapper a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.collapse-btn {
+  /* ... існуючі стилі ... */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.filter-btn {
+  /* ... існуючі стилі ... */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.page-btn {
+  /* ... існуючі стилі ... */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dropdown-content a {
+  /* ... існуючі стилі ... */
+  -webkit-tap-highlight-color: transparent;
 }
