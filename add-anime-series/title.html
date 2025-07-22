@@ -172,6 +172,7 @@
     <div class="tabs">
       <div class="tab active" onclick="switchTab('add_title')">Додати тайтл</div>
       <div class="tab" onclick="switchTab('add_season')">Додати сезон</div>
+      <div class="tab" onclick="switchTab('add_season_chapter')">Додати частину</div>
     </div>
 
     <div class="form-container">
@@ -184,6 +185,7 @@
           <div class="form-group"><input id="title_season" type="number" placeholder="Сезон"></div>
           <div class="form-group"><input id="title_episodes_count" type="number" placeholder="Скільки серій в сезоні"></div>
         </div>
+        <div class="form-group"><input id="title_season_chapter" type="number" placeholder="Частина (Якщо потрібно)"></div>
 
         <div class="section-title">Опис аніме</div>
         <div class="form-group"><input id="title_release_year" type="number" placeholder="Рік випуску аніме"></div>
@@ -197,6 +199,15 @@
         
         <div class="section-title" s>Налаштування</div>
         <div class="input-like-box">
+            <div class="form-group setting-3">
+                <label class="switch-label">
+                    <label class="switch">
+                        <input type="checkbox" id="title_include_exist_official_dub">
+                        <span class="slider"></span>
+                    </label>
+                    Чи є офіційний дубляж (Це аніме буде як інформація на сайті)
+                </label>
+            </div>
             <div class="form-group setting-3">
                 <label class="switch-label">
                     <label class="switch">
@@ -216,11 +227,13 @@
       <!-- ТАБ: Додати сезон -->
       <div id="add_season" class="form" style="display:none">
         <div class="section-title">Аніме</div>
+
         <div class="form-group">
           <select id="season_anime_list">
             <option value=""></option>
           </select>
         </div>
+
         <div class="row">
           <div class="form-group">
             <input id="season_number" type="number" placeholder="Сезон">
@@ -229,6 +242,7 @@
             <input id="season_episodes_count" type="number" placeholder="Скільки серій в сезоні">
           </div>
         </div>
+        <div class="form-group"><input id="season_season_chapter" type="number" placeholder="Частина (Якщо потрібно)"></div>
 
         <div class="section-title">Опис сезону</div>
         <div class="form-group"><input id="season_release_year" type="number" placeholder="Рік випуску сезону"></div>
@@ -237,10 +251,18 @@
         <div class="form-group"><input id="season-studio_publisher" placeholder="Студія видавець"></div>
         <div class="form-group"><textarea id="season-description" placeholder="Опис"></textarea></div>
 
-        <div class="section-title">Опис</div>
 
         <div class="section-title" s>Налаштування</div>
         <div class="input-like-box">
+            <div class="form-group setting-3">
+                <label class="switch-label">
+                    <label class="switch">
+                        <input type="checkbox" id="season_include_exist_official_dub">
+                        <span class="slider"></span>
+                    </label>
+                    Чи є офіційний дубляж (Цей сезон буде як інформація на сайті)
+                </label>
+            </div>
             <div class="form-group setting-3">
                 <label class="switch-label">
                     <label class="switch">
@@ -254,6 +276,64 @@
 
         <div class="submit-button">
           <button onclick="sendSeasone()">Відправити</button>
+        </div>
+      </div>
+
+
+      <!-- ТАБ: Додати частину сезону -->
+      <div id="add_season_chapter" class="form" style="display:none">
+        <div class="section-title">Обиріть аніме</div>
+        <div class="form-group">
+          <select id="anime_list_chapter">
+            <option value=""></option>
+          </select>
+        </div>
+        <div class="section-title">Обиріть сезон</div>
+        <div class="form-group">
+          <select id="season_list_chapter">
+            <option value=""></option>
+          </select>
+        </div>
+        <div class="section-title">Обиріть частину</div>
+        <div class="form-group">
+          <select id="chapter_list_chapter">
+            <option value=""></option>
+          </select>
+        </div>
+
+
+        <div class="section-title">Опис частини</div>
+        <div class="form-group"><input id="chapter_release_year" type="number" placeholder="Рік випуску сезону"></div>
+        <div class="form-group"><input id="chapter_ganre" placeholder="Жанр"></div>
+        <div class="form-group"><input id="chapter-director" placeholder="Режисер"></div>
+        <div class="form-group"><input id="chapter-studio_publisher" placeholder="Студія видавець"></div>
+        <div class="form-group"><textarea id="chapter-description" placeholder="Опис"></textarea></div>
+
+
+        <div class="section-title" s>Налаштування</div>
+        <div class="input-like-box">
+            <div class="form-group setting-3">
+                <label class="switch-label">
+                    <label class="switch">
+                        <input type="checkbox" id="chapter_include_exist_official_dub">
+                        <span class="slider"></span>
+                    </label>
+                    Чи є офіційний дубляж (Ця частина буде як інформація на сайті)
+                </label>
+            </div>
+            <div class="form-group setting-3">
+                <label class="switch-label">
+                    <label class="switch">
+                        <input type="checkbox" id="chapter_include_season_num" checked>
+                        <span class="slider"></span>
+                    </label>
+                    Додати номер сезону до назви
+                </label>
+            </div>
+        </div>
+
+        <div class="submit-button">
+          <button onclick="sendSeasoneChapter()">Відправити</button>
         </div>
       </div>
     </div>
@@ -273,10 +353,12 @@
     function sendTitle() {
       const data = {
         user_id: tg.initDataUnsafe?.user?.id,
-        name: document.getElementById('title_name')?.value.trim(),
+        name: document.getElementById('title_name')?.value.trim(), 
         name_en: document.getElementById('title_name_en')?.value.trim(),
         season: document.getElementById('title_season')?.value,
         episodes_count: document.getElementById('title_episodes_count')?.value,
+
+        chapter: document.getElementById('title_season_chapter')?.value,
 
         release_year: document.getElementById('title_release_year')?.value,
         ganre: document.getElementById('title_ganre')?.value.trim(),
@@ -284,6 +366,7 @@
         studio_publisher: document.getElementById('title-studio_publisher')?.value.trim(),
         description: document.getElementById('title_description')?.value.trim(),
 
+        include_exist_official_dub: document.getElementById('title_include_exist_official_dub')?.checked ?? false,
         include_season_num: document.getElementById('title_include_season_num')?.checked ?? true,
         tag: document.getElementById('title_tag')?.value.trim(),
       };
@@ -309,12 +392,15 @@
         season: document.getElementById('season_number')?.value,
         episodes_count: document.getElementById('season_episodes_count')?.value,
 
+        chapter: document.getElementById('season_season_chapter')?.value,
+
         release_year: document.getElementById('season_release_year')?.value,
         ganre: document.getElementById('season_ganre')?.value.trim(),
         director: document.getElementById('season-director')?.value.trim(),
         studio_publisher: document.getElementById('season-studio_publisher')?.value.trim(),
         description: document.getElementById('season_description')?.value.trim(),
 
+        include_exist_official_dub: document.getElementById('season_include_exist_official_dub')?.checked ?? false,
         include_season_num: document.getElementById('season_include_season_num')?.checked ?? true,
         tag: select?.value,
       };
@@ -332,15 +418,101 @@
       });
     }
 
+    function sendSeasoneChapter() {
+      const animeSelect = document.getElementById("anime_list_chapter");
+      const seasonSelect = document.getElementById("season_list_chapter");
+      const chapterSelect = document.getElementById("chapter_list_chapter");
+
+      const data = {
+        user_id: tg.initDataUnsafe?.user?.id,
+        anime_tag: animeSelect.value,
+        season_number: seasonSelect.value,
+        chapter: chapterSelect.value,
+      
+        release_year: document.getElementById('chapter_release_year')?.value,
+        ganre: document.getElementById('chapter_ganre')?.value.trim(),
+        director: document.getElementById('chapter-director')?.value.trim(),
+        studio_publisher: document.getElementById('chapter-studio_publisher')?.value.trim(),
+        description: document.getElementById('chapter-description')?.value.trim(),
+      
+        include_exist_official_dub: document.getElementById('chapter_include_exist_official_dub')?.checked ?? false,
+        include_season_num: document.getElementById('chapter_include_season_num')?.checked ?? true,
+      };
+    
+      fetch("http://localhost:8000/submit_season_chapter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(response => tg.close())
+      .catch(error => {
+        alert("Помилка при надсиланні!");
+        console.error(error);
+      });
+    }
+
     // Отримання списку аніме
     fetch("http://localhost:8000/anime")
       .then(res => res.json())
-      .then(animeList => {
-        animeList.forEach(anime => {
-          const option = document.createElement("option");
-          option.value = anime.tag;
-          option.textContent = anime.name;
-          document.getElementById("season_anime_list").appendChild(option);
+      .then(data => {
+        animeData = data;
+      
+        const seasonAnimeSelect = document.getElementById("season_anime_list");
+
+        const animeSelect = document.getElementById("anime_list_chapter");
+        const seasonSelect = document.getElementById("season_list_chapter");
+        const chapterSelect = document.getElementById("chapter_list_chapter");
+      
+        // Заповнення списку аніме
+        animeData.forEach(anime => {
+          // Для select у вкладці "Додати частину"
+          const option1 = document.createElement("option");
+          option1.value = anime.tag;
+          option1.textContent = anime.name;
+          animeSelect.appendChild(option1);
+
+          // Для select у вкладці "Додати сезон"
+          const option2 = document.createElement("option");
+          option2.value = anime.tag;
+          option2.textContent = anime.name;
+          seasonAnimeSelect.appendChild(option2);
+        });
+      
+        // При виборі аніме — оновити сезони
+        animeSelect.addEventListener("change", () => {
+          seasonSelect.innerHTML = "<option value=''></option>";
+          chapterSelect.innerHTML = "<option value=''></option>";
+        
+          const selectedTag = animeSelect.value;
+          const selectedAnime = animeData.find(a => a.tag === selectedTag);
+          if (!selectedAnime) return;
+        
+          selectedAnime.seasons?.forEach(season => {
+            const option = document.createElement("option");
+            option.value = season.number;
+            option.textContent = `Сезон ${season.number}`;
+            seasonSelect.appendChild(option);
+          });
+        });
+      
+        // При виборі сезону — оновити частини
+        seasonSelect.addEventListener("change", () => {
+          chapterSelect.innerHTML = "<option value=''></option>";
+        
+          const selectedTag = animeSelect.value;
+          const selectedSeason = parseInt(seasonSelect.value);
+          const selectedAnime = animeData.find(a => a.tag === selectedTag);
+          const seasonObj = selectedAnime?.seasons?.find(s => s.number === selectedSeason);
+        
+          if (!seasonObj) return;
+        
+          seasonObj.chapters?.forEach(chapter => {
+            const option = document.createElement("option");
+            option.value = chapter.number;
+            option.textContent = `Частина ${chapter.number}`;
+            chapterSelect.appendChild(option);
+          });
         });
       });
   </script>

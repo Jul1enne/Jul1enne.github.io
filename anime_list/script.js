@@ -87,8 +87,8 @@ async function renderAnimePage(page) {
           <img src="http://localhost:8000/poster/${anime.file_id}" class="poster" alt="Poster">
           <div class="info">
             ${badgeHTML}
-            <div class="title">${anime.title} ${anime.season} сезон</div>
-            <div class="subtitle">${anime.title_en} ${anime.season} season</div>
+            <div class="title">${anime.title}</div>
+            <div class="subtitle">${anime.title_en}</div>
             <div class="meta-block">
               <div><strong>Рік:</strong> ${anime.year}</div>
               <div><strong>Жанр:</strong> ${anime.genre}</div>

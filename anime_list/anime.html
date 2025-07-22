@@ -176,6 +176,23 @@
       background-color: #F2A44C;
     }
 
+    .official-dub-title {
+      display: block;
+      max-width: 100%;
+      box-sizing: border-box; /* Щоб padding враховувався у ширину */
+      width: 100%;
+      background-color: #F2A44C;
+      color: #3a3a3c;
+      font-weight: bold;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 16px;
+      text-align: center;
+      margin-top: 12px;
+      cursor: default;
+      user-select: none;
+    }
+
   </style>
 </head>
 <body>
@@ -208,112 +225,115 @@
 
     function renderAnime(anime) {
       let content = "";
-      let badgeHTML = "";
-        
-      if (anime.type === "series") {
-        const activeSeasonNumber = anime.active_season ?? anime.seasons[0].number;
-        const season = anime.seasons.find(s => s.number === activeSeasonNumber);
+      let activeItem = anime.chronology.find(s => s.id === anime.active_id) || anime.chronology[0];
+      let isSeries = activeItem.type === "series";
+
+      const buttonsHTML = anime.chronology.map(item => {
+        return `<a href="#" class="${item.id === activeItem.id ? 'active' : ''}" onclick="event.preventDefault(); switchPart(${anime.id}, ${item.id}, this)">
+          ${item.button_label}
+        </a>`;
+      }).join('');
+    
+      const dropdown = `
+        <div class="dropdown">
+          <div class="dropdown-header" onclick="this.parentNode.classList.toggle('open')">Хронологія</div>
+          <div class="dropdown-content" id="seasonLinks">${buttonsHTML}</div>
+        </div>
+      `;
       
-        if (!season.finished) {
-          badgeHTML = `<div class="badge"><strong>ОЗВУЧУЄТЬСЯ</strong></div>`;
-        }
-      
+      if (isSeries) {
         content = `
           <div class="anime-item expanded">
-            <div class="details">
-              <div class="dropdown">
-                <div class="dropdown-header" onclick="this.parentNode.classList.toggle('open')">Сезони</div>
-                <div class="dropdown-content" id="seasonLinks">
-                  ${anime.seasons.map(s => `
-                    <a href="#" data-season="${s.number}" class="${s.number === activeSeasonNumber ? 'active' : ''}"
-                       onclick="event.preventDefault(); switchSeason(${anime.id}, ${s.number}, this)">
-                       Сезон ${s.number}
-                    </a>
-                  `).join('')}
-                </div>
-              </div>
-            </div>
-          
+            <div class="details">${dropdown}</div>
             <div class="anime-summary">
-
               <div class="poster-container">
-                <img src="http://localhost:8000/poster/${season.file_id}" class="poster" alt="Poster">
-                <div class="anime-actions">
-                  <button id="watchedBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>Переглянуте</button>
-                  <button id="watchBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>Дивлюсь</button>
-                  <button id="plannedBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>На потім</button>
+                <img src="http://localhost:8000/poster/${activeItem.file_id}" class="poster" alt="Poster">
+                <div class="anime-actions" id="animeActions">
+                  ${renderButtons(activeItem.id)}
                 </div>
               </div>
-                
               <div class="info">
-                <div id="finished-anime">
-                  ${badgeHTML}
-                </div>
-                <div class="title">${anime.title} ${season.number} сезон</div>
-                <div class="subtitle"><i>${anime.title_en} ${season.number} season</i></div>
+                <div id="finished-anime">${!activeItem.finished ? `<div class="badge"><strong>ОЗВУЧУЄТЬСЯ</strong></div>` : ''}</div>
+                <div class="title">${activeItem.title}</div>
+                <div class="subtitle"><i>${activeItem.title_en}</i></div>
                 <div class="meta">
-                  <div><strong>Жанр:</strong> ${season.genre}</div>
-                  <div><strong>Кількість серій:</strong> ${season.episodes}</div>
-                  <div><strong>Рік:</strong> ${season.year}</div>
-                  <div><strong>Режисер(и):</strong> ${season.director}</div>
-                  <div><strong>Студія видавець:</strong> ${season.studio_publisher}</div>
+                  <div><strong>Жанр:</strong> ${activeItem.genre}</div>
+                  <div><strong>Кількість серій:</strong> ${activeItem.episodes}</div>
+                  <div><strong>Рік:</strong> ${activeItem.year}</div>
+                  <div><strong>Режисер(и):</strong> ${activeItem.director}</div>
+                  <div><strong>Студія видавець:</strong> ${activeItem.studio_publisher}</div>
                 </div>
               </div>
             </div>
-            
             <div class="details">
-              <div class="description">${season.description}</div>
-              <div class="dropdown">
-                <div class="dropdown-header" onclick="this.parentNode.classList.toggle('open')">Серії</div>
-                <div class="dropdown-content" id="episodes">
-                  ${season.episodeLinks.map(e => `<a href="${e.url}">${e.title}</a>`).join('')}
-                </div>
-              </div>
+              <div class="description">${activeItem.description}</div>
+              ${activeItem.exist_official_dub
+                ? `<div class="official-dub-title">
+                     ${activeItem.exist_official_dub_title}
+                   </div>`
+                : `<div class="dropdown">
+                     <div class="dropdown-header" onclick="this.parentNode.classList.toggle('open')">Серії</div>
+                     <div class="dropdown-content" id="episodes">
+                       ${activeItem.episodeLinks.map(e => `<a href="${e.url}">${e.title}</a>`).join('')}
+                     </div>
+                   </div>`
+              }
             </div>
           </div>
         `;
-      } else if (anime.type === "movie") {
+      } else {
         content = `
           <div class="anime-item expanded">
+            <div class="details">${dropdown}</div>
             <div class="anime-summary">
-
               <div class="poster-container">
-                <img src="http://localhost:8000/poster/${anime.file_id}" class="poster" alt="Poster">
-                <div class="anime-actions">
-                  <button id="watchedBtn" class="action-btn" data-anime-id=${anime.id} data-user-id=${userId}>Переглянуто</button>
-                  <button id="watchBtn" class="action-btn" data-anime-id=${anime.id} data-user-id=${userId}>Дивлюсь</button>
-                  <button id="plannedBtn" class="action-btn" data-anime-id=${anime.id} data-user-id=${userId}>На потім</button>
+                <img src="http://localhost:8000/poster/${activeItem.file_id}" class="poster" alt="Poster">
+                <div class="anime-actions" id="animeActions">
+                  ${renderButtons(activeItem.id)}
                 </div>
               </div>
-
               <div class="info">
-                <div class="title">${anime.title}</div>
-                <div class="subtitle"><i>${anime.title_en}</i></div>
+                <div class="title">${activeItem.title}</div>
+                <div class="subtitle"><i>${activeItem.title_en}</i></div>
                 <div class="meta">
-                  <div><strong>Жанр:</strong> ${anime.genre}</div>
-                  <div><strong>Рік:</strong> ${anime.year}</div>
-                  <div><strong>Режисер(и):</strong> ${anime.director}</div>
-                  <div><strong>Студія видавець:</strong> ${anime.studio_publisher}</div>
+                  <div><strong>Жанр:</strong> ${activeItem.genre}</div>
+                  <div><strong>Рік:</strong> ${activeItem.year}</div>
+                  <div><strong>Режисер(и):</strong> ${activeItem.director}</div>
+                  <div><strong>Студія видавець:</strong> ${activeItem.studio_publisher}</div>
                 </div>
               </div>
             </div>
-            
             <div class="details">
-              <div class="description">${anime.description}</div>
-              <a href="${anime.episodeLink}" class="back-btn">Дивитися</a>
+              <div class="description">${activeItem.description}</div>
+              ${activeItem.exist_official_dub
+                ? `<div class="official-dub-title">
+                     ${activeItem.exist_official_dub_title}
+                   </div>`
+                : `<a href="${activeItem.episodeLink}" class="back-btn">Дивитися</a>`
+              }
             </div>
           </div>
         `;
       }
     
       container.innerHTML = content;
-    
-      // === ⬇️ Додаємо логіку кнопок ПІСЛЯ рендеру ===
+      attachButtonEvents(activeItem.id);
+    }
+
+    function renderButtons(animeId) {
+      return `
+        <button id="watchedBtn" class="action-btn" data-anime-id="${animeId}" data-user-id="${userId}">Переглянуто</button>
+        <button id="watchBtn" class="action-btn" data-anime-id="${animeId}" data-user-id="${userId}">Дивлюсь</button>
+        <button id="plannedBtn" class="action-btn" data-anime-id="${animeId}" data-user-id="${userId}">На потім</button>
+      `;
+    }
+
+    function attachButtonEvents(animeId) {
       const watchedBtn = document.getElementById('watchedBtn');
       const watchBtn = document.getElementById('watchBtn');
       const plannedBtn = document.getElementById('plannedBtn');
     
-      fetch(`http://localhost:8000/user_status/${userId}/${anime.id}`)
+      fetch(`http://localhost:8000/user_status/${userId}/${animeId}`)
         .then(res => res.json())
         .then(status => {
           if (status.watched) watchedBtn.classList.add('active');
@@ -321,109 +341,42 @@
           if (status.planned) plannedBtn.classList.add('active');
         });
       
-      watchedBtn.addEventListener("click", () => toggleStatus("watched", anime.id, userId));
-      watchBtn.addEventListener("click", () => toggleStatus("watch", anime.id, userId));
-      plannedBtn.addEventListener("click", () => toggleStatus("planned", anime.id, userId));
+      watchedBtn.addEventListener("click", () => toggleStatus("watched", animeId));
+      watchBtn.addEventListener("click", () => toggleStatus("watch", animeId));
+      plannedBtn.addEventListener("click", () => toggleStatus("planned", animeId));
     }
 
-
-
-
-    function switchSeason(animeId, seasonNumber, element) {
+    function switchPart(animeId, partId, element) {
       fetch(`http://localhost:8000/anime_id/${animeId}`)
         .then(res => res.json())
         .then(anime => {
-          // Зняти активний клас з усіх сезонів
           document.querySelectorAll('#seasonLinks a').forEach(a => a.classList.remove('active'));
           if (element) element.classList.add('active');
-        
-          const season = anime.seasons.find(s => s.number === seasonNumber);
-          const anime_actions = document.querySelector('.anime-actions');
-          const poster = document.querySelector('.poster');
-          const meta = document.querySelector('.meta');
-          const description = document.querySelector('.description');
-          const episodes = document.getElementById('episodes');
-
-          const finished_anime = document.getElementById('finished-anime');
-          if (!season.finished) {
-            badgeHTML = `<div class="badge"><strong>ОЗВУЧУЄТЬСЯ</strong></div>`;
-          }
-          else {
-            badgeHTML = ``
-          }
-          finished_anime.innerHTML = `${badgeHTML}`
-
-          const title = document.querySelector('.title');
-          const subtitle = document.querySelector('.subtitle');
-          title.textContent = `${anime.title} ${season.number} сезон`;
-          subtitle.textContent = `${anime.title_en} ${season.number} season`;
-
-        
-          // Оновлюємо основні дані
-          poster.src = `http://localhost:8000/poster/${season.file_id}`;
-          meta.innerHTML = `
-            <div><strong>Жанр:</strong> ${season.genre}</div>
-            <div><strong>Кількість серій:</strong> ${season.episodes}</div>
-            <div><strong>Рік:</strong> ${season.year}</div>
-            <div><strong>Режисер(и):</strong> ${season.director}</div>
-            <div><strong>Студія видавець:</strong> ${season.studio_publisher}</div>
-          `;
-          description.textContent = season.description;
-          episodes.innerHTML = season.episodeLinks.map(e => `<a href="${e.url}">${e.title}</a>`).join('');
-        
-          // 🔁 Оновлюємо кнопки
-          anime_actions.innerHTML = `
-            <button id="watchedBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>Переглянуто</button>
-            <button id="watchBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>Дивлюсь</button>
-            <button id="plannedBtn" class="action-btn" data-anime-id=${season.id} data-user-id=${userId}>На потім</button>
-          `;
-        
-          const watchedBtn = document.getElementById('watchedBtn');
-          const watchBtn = document.getElementById('watchBtn');
-          const plannedBtn = document.getElementById('plannedBtn');
-        
-          // Завантажити статус для цього сезону
-          fetch(`http://localhost:8000/user_status/${userId}/${season.id}`)
-            .then(res => res.json())
-            .then(status => {
-              if (status.watched) watchedBtn.classList.add("active");
-              if (status.watch) watchBtn.classList.add('active');
-              if (status.planned) plannedBtn.classList.add("active");
-            });
-          
-          // Прив’язати обробники натискання
-          watchedBtn.addEventListener("click", () => toggleStatus("watched", season.id));
-          watchBtn.addEventListener("click", () => toggleStatus("watch", season.id));
-          plannedBtn.addEventListener("click", () => toggleStatus("planned", season.id));
+          const part = anime.chronology.find(p => p.id === partId);
+          anime.active_id = part.id; 
+          renderAnime(anime);
         });
     }
-
-    document.addEventListener('DOMContentLoaded', loadAnime);
-  
 
     function toggleStatus(status, animeId) {
       const watchedBtn = document.getElementById("watchedBtn");
       const watchBtn = document.getElementById("watchBtn");
       const plannedBtn = document.getElementById("plannedBtn");
-
       const userId = watchedBtn.dataset.userId;
-
+    
       let watched = watchedBtn.classList.contains("active");
       let watch = watchBtn.classList.contains("active");
       let planned = plannedBtn.classList.contains("active");
-
+    
       if (status === "watched") {
         watched = !watched;
-        planned = false;
-        watch = false;
+        watch = planned = false;
       } else if (status === "watch") {
         watch = !watch;
-        planned = false;
-        watched = false;
+        watched = planned = false;
       } else if (status === "planned") {
         planned = !planned;
-        watched = false;
-        watch = false;
+        watched = watch = false;
       }
     
       watchedBtn.classList.toggle("active", watched);
@@ -438,35 +391,20 @@
         body: JSON.stringify({
           user_id: userId,
           anime_id: animeId,
-          watched: watched,
-          watch: watch,
-          planned: planned
+          watched, watch, planned
         }),
-      })
-        .then(res => {
-          if (!res.ok) throw new Error("Помилка при оновленні статусу");
-          return res.json();
-        })
-        .then(data => {
-          console.log("Статус оновлено:", data);
-        })
-        .catch(err => {
-          console.error("Помилка:", err);
-        });
+      }).catch(console.error);
     }
+
+    document.addEventListener('DOMContentLoaded', loadAnime);
 
     document.addEventListener('DOMContentLoaded', () => {
       const backBtn = document.getElementById('backToListBtn');
       const savedUrl = localStorage.getItem('animeListReturnUrl');
-
       if (backBtn) {
         backBtn.addEventListener('click', (e) => {
           e.preventDefault();
-          if (savedUrl) {
-            window.location.href = savedUrl;
-          } else {
-            window.location.href = 'index.html'; // запасний варіант
-          }
+          window.location.href = savedUrl || 'index.html';
         });
       }
     });
