@@ -18,6 +18,7 @@ function collectFormData(prefix, type) {
         user_id: tg.initDataUnsafe?.user?.id,
         name: document.getElementById(`anime_list_${prefix}`)?.value,
         season: document.getElementById(`season_list_${prefix}`)?.value,
+        part: document.getElementById(`part_list_${prefix}`)?.value || null,
         episode: document.getElementById(`episode_num_${prefix}`)?.value,
         episode_title: document.getElementById(`episode_title_${prefix}`)?.value.trim(),
 
@@ -161,14 +162,34 @@ fetch("http://localhost:8000/anime")
             animeSelect.addEventListener("change", () => {
                 const selectedTag = animeSelect.value;
                 const selectedAnime = animeData.find(a => a.tag === selectedTag);
-                seasonSelect.innerHTML = "";
+                seasonSelect.innerHTML = "<option value=''></option>";
+                document.getElementById(`part_list_${prefix}`).innerHTML = "<option value=''>Частина</option>";
+
                 if (!selectedAnime || !selectedAnime.seasons) return;
 
+                // Додаємо сезони
                 selectedAnime.seasons.forEach(season => {
                     const opt = document.createElement("option");
-                    opt.value = season;
-                    opt.textContent = `Сезон ${season}`;
+                    opt.value = season.number;
+                    opt.textContent = `Сезон ${season.number}`;
                     seasonSelect.appendChild(opt);
+                });
+              
+                // При зміні сезону — оновлюємо список частин
+                seasonSelect.addEventListener("change", () => {
+                    const selectedSeasonNumber = parseInt(seasonSelect.value, 10);
+                    const selectedSeason = selectedAnime.seasons.find(s => s.number === selectedSeasonNumber);
+                    const partSelect = document.getElementById(`part_list_${prefix}`);
+                    partSelect.innerHTML = "<option value=''>Частина</option>";
+                    
+                    if (selectedSeason && selectedSeason.chapters) {
+                        selectedSeason.chapters.forEach(ch => {
+                            const partOpt = document.createElement("option");
+                            partOpt.value = ch.number;
+                            partOpt.textContent = `Частина ${ch.number}`;
+                            partSelect.appendChild(partOpt);
+                        });
+                    }
                 });
             });
         });
