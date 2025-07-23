@@ -234,7 +234,9 @@
             <option value=""></option>
           </select>
         </div>
-
+        
+        <div class="form-group"><input id="season_name" placeholder="назва сезону"></div>
+        <div class="form-group"><input id="season_name_en" placeholder="назва сезону англійською"></div>
         <div class="row">
           <div class="form-group">
             <input id="season_number" type="number" placeholder="Сезон">
@@ -244,9 +246,7 @@
           </div>
         </div>
         <div class="form-group"><input id="season_season_chapter" type="number" placeholder="Частина (Якщо потрібно)"></div>
-        <div class="section-title">Назва (Якщо змінилась)</div>
-        <div class="form-group"><input id="season_name" placeholder="Інша назва сезону"></div>
-        <div class="form-group"><input id="season_name_en" placeholder="Інша назва сезону англійською"></div>
+
 
         <div class="section-title">Опис сезону</div>
         <div class="form-group"><input id="season_release_year" type="number" placeholder="Рік випуску сезону"></div>
@@ -413,14 +413,13 @@
       const selectedOption = select.selectedOptions[0];
       const data = {
         user_id: tg.initDataUnsafe?.user?.id,
-        name: select.selectedOptions[0].textContent,
         first_anime_id: selectedOption ? selectedOption.getAttribute("data-id") : null,
+        name: document.getElementById('season_name')?.value.trim(), 
+        name_en: document.getElementById('season_name_en')?.value.trim(),
         season: document.getElementById('season_number')?.value,
         episodes_count: document.getElementById('season_episodes_count')?.value,
 
         chapter: document.getElementById('season_season_chapter')?.value,
-        new_name: document.getElementById('season_name')?.value.trim(), 
-        new_name_en: document.getElementById('season_name_en')?.value.trim(),
 
         release_year: document.getElementById('season_release_year')?.value,
         ganre: document.getElementById('season_ganre')?.value.trim(),
