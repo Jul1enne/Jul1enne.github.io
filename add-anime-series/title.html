@@ -407,7 +407,7 @@
       const data = {
         user_id: tg.initDataUnsafe?.user?.id,
         name: select.selectedOptions[0].textContent,
-        first_anime_id: selectedOption.getAttribute("data-id"),
+        first_anime_id: select.selectedOption.getAttribute("data-id"),
         season: document.getElementById('season_number')?.value,
         episodes_count: document.getElementById('season_episodes_count')?.value,
 
