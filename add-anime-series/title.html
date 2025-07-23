@@ -195,7 +195,8 @@
         <div class="form-group"><textarea id="title_description" placeholder="Опис"></textarea></div>
 
         <div class="section-title">Додатково</div>
-        <div class="form-group"><input id="title_tag" placeholder="Тег"></div>
+        <div class="form-group"><input id="title_tag" placeholder="Тег (Унікальний)"></div>
+        <div class="form-group"><input id="title_tag_full" placeholder="Повний тег (Унікальний)"></div>
         
         <div class="section-title" s>Налаштування</div>
         <div class="input-like-box">
@@ -243,6 +244,9 @@
           </div>
         </div>
         <div class="form-group"><input id="season_season_chapter" type="number" placeholder="Частина (Якщо потрібно)"></div>
+        <div class="section-title">Назва (Якщо змінилась)</div>
+        <div class="form-group"><input id="season_name" placeholder="Назва"></div>
+        <div class="form-group"><input id="season_name_en" placeholder="Назва англійською"></div>
 
         <div class="section-title">Опис сезону</div>
         <div class="form-group"><input id="season_release_year" type="number" placeholder="Рік випуску сезону"></div>
@@ -251,6 +255,8 @@
         <div class="form-group"><input id="season-studio_publisher" placeholder="Студія видавець"></div>
         <div class="form-group"><textarea id="season-description" placeholder="Опис"></textarea></div>
 
+        <div class="section-title">Додатково</div>
+        <div class="form-group"><input id="season_tag_full" placeholder="Повний тег (Унікальний)"></div>
 
         <div class="section-title" s>Налаштування</div>
         <div class="input-like-box">
@@ -309,6 +315,8 @@
         <div class="form-group"><input id="chapter-studio_publisher" placeholder="Студія видавець"></div>
         <div class="form-group"><textarea id="chapter-description" placeholder="Опис"></textarea></div>
 
+        <div class="section-title">Додатково</div>
+        <div class="form-group"><input id="chapter_tag_full" placeholder="Повний тег (Унікальний)"></div>
 
         <div class="section-title" s>Налаштування</div>
         <div class="input-like-box">
@@ -369,6 +377,7 @@
         include_exist_official_dub: document.getElementById('title_include_exist_official_dub')?.checked ?? false,
         include_season_num: document.getElementById('title_include_season_num')?.checked ?? true,
         tag: document.getElementById('title_tag')?.value.trim(),
+        tag_full: document.getElementById('title_tag_full')?.value.trim(),
       };
 
       fetch("http://localhost:8000/submit_title", {
@@ -376,12 +385,21 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
       })
-      .then(res => res.json())
-      .then(response => tg.close())
-      .catch(error => {
-        alert("Помилка при надсиланні!");
-        console.error(error);
-      });
+        .then(async res => {
+          const result = await res.json();
+        
+          if (!res.ok) {
+            // Якщо відповідь з помилкою — покажи повідомлення
+            throw new Error(result.error || "Невідома помилка");
+          }
+        
+          // Якщо все добре — закриваємо WebApp
+          tg.close();
+        })
+        .catch(error => {
+          alert("Помилка: " + error.message);
+          console.error("Server error:", error);
+        });
     }
 
     function sendSeasone() {
@@ -393,6 +411,8 @@
         episodes_count: document.getElementById('season_episodes_count')?.value,
 
         chapter: document.getElementById('season_season_chapter')?.value,
+        name: document.getElementById('season_name')?.value.trim(), 
+        name_en: document.getElementById('season_name_en')?.value.trim(),
 
         release_year: document.getElementById('season_release_year')?.value,
         ganre: document.getElementById('season_ganre')?.value.trim(),
@@ -403,6 +423,7 @@
         include_exist_official_dub: document.getElementById('season_include_exist_official_dub')?.checked ?? false,
         include_season_num: document.getElementById('season_include_season_num')?.checked ?? true,
         tag: select?.value,
+        tag_full: document.getElementById('season_tag_full')?.value.trim(),
       };
 
       fetch("http://localhost:8000/submit_seasone", {
@@ -425,9 +446,11 @@
 
       const data = {
         user_id: tg.initDataUnsafe?.user?.id,
-        anime_tag: animeSelect.value,
-        season_number: seasonSelect.value,
+        tag: animeSelect.value,
+        season: seasonSelect.value,
         chapter: chapterSelect.value,
+
+        tag_full: document.getElementById('chapter_tag_full')?.value.trim(),
       
         release_year: document.getElementById('chapter_release_year')?.value,
         ganre: document.getElementById('chapter_ganre')?.value.trim(),
