@@ -359,6 +359,9 @@
     }
 
     function sendTitle() {
+      if (!confirm("Впевнені, що все вірно?")) {
+        return; // користувач натиснув "Ні" — зупинити виконання
+      }
       const data = {
         user_id: tg.initDataUnsafe?.user?.id,
         name: document.getElementById('title_name')?.value.trim(), 
@@ -403,6 +406,9 @@
     }
 
     function sendSeasone() {
+      if (!confirm("Впевнені, що все вірно?")) {
+        return; // користувач натиснув "Ні" — зупинити виконання
+      }
       const select = document.getElementById('season_anime_list');
       const selectedOption = select.selectedOptions[0];
       const data = {
@@ -451,6 +457,9 @@
     }
 
     function sendSeasoneChapter() {
+      if (!confirm("Впевнені, що все вірно?")) {
+        return; // користувач натиснув "Ні" — зупинити виконання
+      }
       const animeSelect = document.getElementById("anime_list_chapter");
       const seasonSelect = document.getElementById("season_list_chapter");
       const chapterSelect = document.getElementById("chapter_list_chapter");
