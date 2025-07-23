@@ -541,7 +541,7 @@
           selectedAnime.seasons?.forEach(season => {
             const option = document.createElement("option");
             option.value = season.number;
-            option.textContent = `Сезон ${season.number}`;
+            option.textContent = `Сезон ${season.lable}`;
             option.setAttribute("data-id", season.season_id);
             seasonSelect.appendChild(option);
           });
