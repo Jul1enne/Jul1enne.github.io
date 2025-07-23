@@ -245,8 +245,8 @@
         </div>
         <div class="form-group"><input id="season_season_chapter" type="number" placeholder="Частина (Якщо потрібно)"></div>
         <div class="section-title">Назва (Якщо змінилась)</div>
-        <div class="form-group"><input id="season_name" placeholder="Назва"></div>
-        <div class="form-group"><input id="season_name_en" placeholder="Назва англійською"></div>
+        <div class="form-group"><input id="season_name" placeholder="Інша назва сезону"></div>
+        <div class="form-group"><input id="season_name_en" placeholder="Інша назва сезону англійською"></div>
 
         <div class="section-title">Опис сезону</div>
         <div class="form-group"><input id="season_release_year" type="number" placeholder="Рік випуску сезону"></div>
@@ -411,8 +411,8 @@
         episodes_count: document.getElementById('season_episodes_count')?.value,
 
         chapter: document.getElementById('season_season_chapter')?.value,
-        name: document.getElementById('season_name')?.value.trim(), 
-        name_en: document.getElementById('season_name_en')?.value.trim(),
+        new_name: document.getElementById('season_name')?.value.trim(), 
+        new_name_en: document.getElementById('season_name_en')?.value.trim(),
 
         release_year: document.getElementById('season_release_year')?.value,
         ganre: document.getElementById('season_ganre')?.value.trim(),
