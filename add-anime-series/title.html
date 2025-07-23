@@ -510,7 +510,7 @@
 
         const animeSelect = document.getElementById("anime_list_chapter");
         const seasonSelect = document.getElementById("season_list_chapter");
-        const chapterSelect = document.getElementById("chapter_list_chapter");
+        //const chapterSelect = document.getElementById("chapter_list_chapter");
       
         // Заповнення списку аніме
         animeData.forEach(anime => {
@@ -532,7 +532,7 @@
         // При виборі аніме — оновити сезони
         animeSelect.addEventListener("change", () => {
           seasonSelect.innerHTML = "<option value=''></option>";
-          chapterSelect.innerHTML = "<option value=''></option>";
+          //chapterSelect.innerHTML = "<option value=''></option>";
         
           const selectedTag = animeSelect.value;
           const selectedAnime = animeData.find(a => a.tag === selectedTag);
