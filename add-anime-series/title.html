@@ -390,24 +390,25 @@
         
           if (!res.ok) {
             // Якщо відповідь з помилкою — покажи повідомлення
-            throw new Error(result.error || "Невідома помилка");
+            throw new Error(result.detail || result.error || "Невідома помилка");
           }
         
           // Якщо все добре — закриваємо WebApp
           tg.close();
         })
         .catch(error => {
-          alert("Помилка: " + error.message);
+          alert(error.message);
           console.error("Server error:", error);
         });
     }
 
     function sendSeasone() {
       const select = document.getElementById('season_anime_list');
+      const selectedOption = select.selectedOptions[0];
       const data = {
         user_id: tg.initDataUnsafe?.user?.id,
         name: select.selectedOptions[0].textContent,
-        first_anime_id: select.selectedOption.getAttribute("data-id"),
+        first_anime_id: selectedOption ? selectedOption.getAttribute("data-id") : null,
         season: document.getElementById('season_number')?.value,
         episodes_count: document.getElementById('season_episodes_count')?.value,
 
@@ -432,12 +433,21 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
       })
-      .then(res => res.json())
-      .then(response => tg.close())
-      .catch(error => {
-        alert("Помилка при надсиланні!");
-        console.error(error);
-      });
+        .then(async res => {
+          const result = await res.json();
+        
+          if (!res.ok) {
+            // Якщо відповідь з помилкою — покажи повідомлення
+            throw new Error(result.detail || result.error || "Невідома помилка");
+          }
+        
+          // Якщо все добре — закриваємо WebApp
+          tg.close();
+        })
+        .catch(error => {
+          alert(error.message);
+          console.error("Server error:", error);
+        });
     }
 
     function sendSeasoneChapter() {
@@ -469,12 +479,21 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
       })
-      .then(res => res.json())
-      .then(response => tg.close())
-      .catch(error => {
-        alert("Помилка при надсиланні!");
-        console.error(error);
-      });
+      .then(async res => {
+          const result = await res.json();
+        
+          if (!res.ok) {
+            // Якщо відповідь з помилкою — покажи повідомлення
+            throw new Error(result.detail || result.error || "Невідома помилка");
+          }
+        
+          // Якщо все добре — закриваємо WebApp
+          tg.close();
+        })
+        .catch(error => {
+          alert(error.message);
+          console.error("Server error:", error);
+        });
     }
 
     // Отримання списку аніме
