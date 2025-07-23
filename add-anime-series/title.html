@@ -407,6 +407,7 @@
       const data = {
         user_id: tg.initDataUnsafe?.user?.id,
         name: select.selectedOptions[0].textContent,
+        first_anime_id: selectedOption.getAttribute("data-id"),
         season: document.getElementById('season_number')?.value,
         episodes_count: document.getElementById('season_episodes_count')?.value,
 
@@ -449,6 +450,7 @@
         tag: animeSelect.value,
         season: seasonSelect.value,
         chapter: chapterSelect.value,
+        anime_id: selectedOption.getAttribute("data-id"),
 
         tag_full: document.getElementById('chapter_tag_full')?.value.trim(),
       
@@ -493,12 +495,14 @@
           const option1 = document.createElement("option");
           option1.value = anime.tag;
           option1.textContent = anime.name;
+          option1.setAttribute("data-id", anime.id);
           animeSelect.appendChild(option1);
 
           // Для select у вкладці "Додати сезон"
           const option2 = document.createElement("option");
           option2.value = anime.tag;
           option2.textContent = anime.name;
+          option2.setAttribute("data-id", anime.id);
           seasonAnimeSelect.appendChild(option2);
         });
       
