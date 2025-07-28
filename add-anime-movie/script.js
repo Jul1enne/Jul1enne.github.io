@@ -24,7 +24,7 @@ function sendMovie() {
         chapter: document.getElementById('chapter').value,
 
         year: document.getElementById('year').value,
-        genre: document.getElementById('ganre').value.trim(),
+        ganre: document.getElementById('ganre').value.trim(),
         director: document.getElementById('director').value.trim(),
         studio_publisher: document.getElementById('studio_publisher').value.trim(),
         description: document.getElementById('description').value.trim(),
