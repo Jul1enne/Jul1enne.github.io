@@ -45,17 +45,13 @@ function sendMovie() {
     })
     .then(res => res.json())
     .then(response => {
-        if (response.status === "movie exist") {
-            alert("Такий фільм вже існує!");
-            return;
-        }
-
-        if (response.status === "movie added") {
+        if (response.status === "anime exist") {
+            alert("Серія цього аніме вже існує!");
+        } else if (response.status === "anime added") {
             tg.close();
-            return;
+        } else {
+            alert("Щось пішло не так!");
         }
-
-        alert("Щось пішло не так!");
     })
     .catch(error => {
         alert("Помилка при надсиланні!");
