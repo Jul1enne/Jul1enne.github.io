@@ -9,6 +9,9 @@ function switchTab(tab) {
 }
 
 function sendMovie() {
+    if (!confirm("Впевнені, що все вірно?")) {
+        return; // користувач натиснув "Ні" — зупинити виконання
+      }
     const voicers = Array.from(document.querySelectorAll('input[name="voicers"]:checked')).map(cb => cb.value);
     const translators = Array.from(document.querySelectorAll('input[name="translators"]:checked')).map(cb => cb.value);
     const sounds = Array.from(document.querySelectorAll('input[name="sounds"]:checked')).map(cb => cb.value);
@@ -42,22 +45,23 @@ function sendMovie() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
-    })
-    .then(res => res.json())
-    .then(response => {
-        if (response.status === "anime exist") {
-            alert("Серія цього аніме вже існує!");
-        } else if (response.status === "anime added") {
-            tg.close();
-        } else {
-            alert("Щось пішло не так!");
-        }
-    })
-    .catch(error => {
-        alert("Помилка при надсиланні!");
-        console.error(error);
-    });
-}
+      })
+        .then(async res => {
+          const result = await res.json();
+        
+          if (!res.ok) {
+            // Якщо відповідь з помилкою — покажи повідомлення
+            throw new Error(result.detail || result.error || "Невідома помилка");
+          }
+        
+          // Якщо все добре — закриваємо WebApp
+          tg.close();
+        })
+        .catch(error => {
+          alert(error.message);
+          console.error("Server error:", error);
+        });
+    }
 
 // Завантажити список озвучувачів
 fetch("http://localhost:8000/voicers")
