@@ -18,6 +18,7 @@ function sendMovie() {
         user_id: tg.initDataUnsafe?.user?.id,
         title_ua: document.getElementById('title_ua').value.trim(),
         title_en: document.getElementById('title_en').value.trim(),
+        chapter: document.getElementById('chapter').value,
         year: document.getElementById('year').value,
         genre: document.getElementById('genres').value.trim(),
         director: document.getElementById('director').value.trim(),
@@ -34,6 +35,7 @@ function sendMovie() {
         tag: document.getElementById('tag').value.trim(),
         include_sound: document.getElementById('include_sound_switch')?.checked ?? true,
         include_translator: document.getElementById('include_translator_switch')?.checked ?? true,
+        include_exist_official_dub: document.getElementById('include_exist_official_dub')?.checked ?? false,
     };
 
     fetch("http://localhost:8000/submit_movie", {
