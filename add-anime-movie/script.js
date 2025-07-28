@@ -22,8 +22,9 @@ function sendMovie() {
         title_ua: document.getElementById('title_ua').value.trim(),
         title_en: document.getElementById('title_en').value.trim(),
         chapter: document.getElementById('chapter').value,
+
         year: document.getElementById('year').value,
-        genre: document.getElementById('genres').value.trim(),
+        genre: document.getElementById('ganre').value.trim(),
         director: document.getElementById('director').value.trim(),
         studio_publisher: document.getElementById('studio_publisher').value.trim(),
         description: document.getElementById('description').value.trim(),
