@@ -9,16 +9,26 @@ function switchTab(tab) {
 }
 
 function collectFormData(prefix, type) {
+    if (!confirm("Впевнені, що все вірно?")) {
+        return; // користувач натиснув "Ні" — зупинити виконання
+      }
+
     const voicers = Array.from(document.querySelectorAll(`input[name="voicers_${prefix}"]:checked`)).map(cb => cb.value);
     const sounds = Array.from(document.querySelectorAll(`input[name="sounds_${prefix}"]:checked`)).map(cb => cb.value);
     const translators = Array.from(document.querySelectorAll(`input[name="translators_${prefix}"]:checked`)).map(cb => cb.value);
+
+    const animeSelect = document.getElementById(`anime_list_${prefix}`);
+    const animeSelectedOption = animeSelect.selectedOptions[0];
 
     return {
         type,
         user_id: tg.initDataUnsafe?.user?.id,
         name: document.getElementById(`anime_list_${prefix}`)?.value,
+
+        anime_id: animeSelectedOption ? animeSelectedOption.getAttribute("data-id") : null,
         season: document.getElementById(`season_list_${prefix}`)?.value,
         part: document.getElementById(`part_list_${prefix}`)?.value || null,
+
         episode: document.getElementById(`episode_num_${prefix}`)?.value,
         episode_title: document.getElementById(`episode_title_${prefix}`)?.value.trim(),
 
@@ -33,6 +43,7 @@ function collectFormData(prefix, type) {
 
         include_finished: document.getElementById(`include_finished_switch_${prefix}`)?.checked ?? false,
         include_sound: document.getElementById(`include_sound_switch_${prefix}`)?.checked ?? true,
+        include_translator: document.getElementById(`include_translator_switch_${prefix}`)?.checked ?? true,
         tag: document.getElementById(`anime_list_${prefix}`)?.value.trim(),
     };
 }
@@ -156,6 +167,7 @@ fetch("http://localhost:8000/anime")
                 const option = document.createElement("option");
                 option.value = anime.tag;
                 option.textContent = anime.name;
+                option.setAttribute("data-id", anime.id);
                 animeSelect.appendChild(option);
             });
 
