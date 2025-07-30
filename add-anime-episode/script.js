@@ -175,7 +175,7 @@ fetch("http://localhost:8000/anime")
                 const selectedTag = animeSelect.value;
                 const selectedAnime = animeData.find(a => a.tag === selectedTag);
                 seasonSelect.innerHTML = "<option value=''></option>";
-                document.getElementById(`part_list_${prefix}`).innerHTML = "<option value=''>Частина</option>";
+                document.getElementById(`part_list_${prefix}`).innerHTML = "<option value=''></option>";
 
                 if (!selectedAnime || !selectedAnime.seasons) return;
 
