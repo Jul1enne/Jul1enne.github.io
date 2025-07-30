@@ -490,3 +490,53 @@ html, body {
   /* ... існуючі стилі ... */
   -webkit-tap-highlight-color: transparent;
 }
+
+.search-wrapper {
+  margin-bottom: 16px;
+}
+
+#searchInput {
+  width: 100%;
+  padding: 10px 14px 10px 40px; /* Збільшуємо паддінг ліворуч, щоб не накривалась іконка */
+  font-size: 18px;
+  border-radius: 10px;
+  border: none;
+  background-color: #2c2c2e;
+  color: white;
+  outline: none;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease;
+
+  background-image: url('data:image/svg+xml;utf8,<svg fill="none" stroke="gray" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>');
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  background-size: 20px 20px;
+}
+/* Медіа-запит для екранів менше 480px */
+@media (max-width: 480px) {
+  #searchInput {
+    font-size: 16px;
+    padding-left: 35px; /* зменшуємо паддінг, щоб іконка не "тягнула" */
+    background-position: 8px center;
+    background-size: 16px 16px; /* зменшуємо іконку */
+  }
+}
+
+/* Можна додати ще один медіа-запит для дуже маленьких екранів */
+@media (max-width: 320px) {
+  #searchInput {
+    font-size: 14px;
+    padding-left: 30px;
+    background-position: 6px center;
+    background-size: 14px 14px;
+  }
+}
+
+
+#searchInput::placeholder {
+  color: #888;
+}
+
+#searchInput:focus {
+  background-color: #3a3a3c;
+}

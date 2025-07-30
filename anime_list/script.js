@@ -1,5 +1,51 @@
+// Додано на початку
+function normalizeText(text) {
+  return text
+    .toLowerCase()
+    .normalize("NFD")                        // Розділяємо літери та діакритичні знаки
+    .replace(/ґ/g, "г")                      // Ґ → г
+    .replace(/є/g, "е")                      // є → е
+    .replace(/ї/g, "і")                      // ї → і
+    .replace(/и/g, "і")                      // и → і (іноді замінюють)
+    .replace(/[’'`´]/g, "")                  // Видаляємо апострофи
+    .replace(/й/g, "і")                      // й → і (іноді)
+    // Англ. заміни, які зазвичай плутають з українськими літерами:
+    .replace(/q/g, "к")
+    .replace(/w/g, "в")
+    .replace(/e/g, "е")
+    .replace(/r/g, "р")
+    .replace(/t/g, "т")
+    .replace(/y/g, "у")
+    .replace(/u/g, "и")
+    .replace(/i/g, "і")
+    .replace(/o/g, "о")
+    .replace(/p/g, "п")
+    .replace(/a/g, "а")
+    .replace(/s/g, "с")
+    .replace(/d/g, "д")
+    .replace(/f/g, "ф")
+    .replace(/g/g, "г")
+    .replace(/h/g, "х")
+    .replace(/j/g, "й")
+    .replace(/k/g, "к")
+    .replace(/l/g, "л")
+    .replace(/z/g, "з")
+    .replace(/x/g, "кс")
+    .replace(/c/g, "ц")
+    .replace(/v/g, "в")
+    .replace(/b/g, "б")
+    .replace(/n/g, "н")
+    .replace(/m/g, "м")
+    // Додатково очищаємо зайві пробіли
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+
+
 const urlParams = new URLSearchParams(window.location.search);
 let filter = urlParams.get("filter") || "all";
+let searchQuery = "";
 const pageFromUrl = parseInt(urlParams.get("page"), 10);
 let currentPage = isNaN(pageFromUrl) ? 1 : pageFromUrl;
 const userId = urlParams.get("userId") || null;
@@ -208,6 +254,15 @@ function setActiveFilter(newFilter) {
 async function loadAndRenderAnime() {
   const result = await fetchAnimeList();
   animeList = result.list;
+  
+  if (searchQuery) {
+    const normalizedSearch = normalizeText(searchQuery);
+    animeList = animeList.filter((anime) =>
+      normalizeText(anime.title).includes(normalizedSearch) ||
+      (anime.title_en && normalizeText(anime.title_en).includes(normalizedSearch))
+    );
+  }
+
   nullAnimeListHTML = result.html;
 
   const container = document.getElementById("animeContainer");
@@ -231,10 +286,13 @@ document.addEventListener("DOMContentLoaded", () => {
       if (selectedFilter === filter) return;
 
       filter = selectedFilter;
+      searchQuery = "";  // очищаємо пошук при перемиканні фільтра
+      document.getElementById("searchInput").value = "";
 
       const url = new URL(window.location);
       url.searchParams.set("filter", selectedFilter);
       url.searchParams.set("page", 1);
+      url.searchParams.delete("search");
       window.history.replaceState({}, '', url);
 
       setActiveFilter(filter);
@@ -248,4 +306,21 @@ document.addEventListener("DOMContentLoaded", () => {
   loadAndRenderAnime();
 });
 
+const searchInput = document.getElementById("searchInput");
+searchInput.addEventListener("input", (e) => {
+  searchQuery = e.target.value.trim().toLowerCase();
+  currentPage = 1;
+
+  const url = new URL(window.location);
+  if (searchQuery) {
+    url.searchParams.set("search", searchQuery);
+  } else {
+    url.searchParams.delete("search");
+  }
+  url.searchParams.set("page", 1);
+  window.history.replaceState({}, "", url);
+
+  setActiveFilter(filter); // заново підсвічує кнопку
+  loadAndRenderAnime();
+});
 

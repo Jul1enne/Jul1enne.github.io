@@ -26,6 +26,7 @@ function collectFormData(prefix, type) {
     return {
         type,
         user_id: tg.initDataUnsafe?.user?.id,
+    
         name: document.getElementById(`anime_list_${prefix}`)?.value,
 
         anime_id: animeSelectedOption ? animeSelectedOption.getAttribute("data-id") : null,
@@ -49,7 +50,7 @@ function collectFormData(prefix, type) {
         include_finished: document.getElementById(`include_finished_switch_${prefix}`)?.checked ?? false,
         include_sound: document.getElementById(`include_sound_switch_${prefix}`)?.checked ?? true,
         include_translator: document.getElementById(`include_translator_switch_${prefix}`)?.checked ?? true,
-        tag: selectedAnime.value.trim(),
+        tag:animeSelect.value.trim(),
     };
 }
 
@@ -61,21 +62,22 @@ function sendData(prefix, type) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
     })
-    .then(res => res.json())
-    .then(response => {
-        if (response.status === "anime exist") {
-            alert("Серія цього аніме вже існує!");
-        } else if (response.status === "anime added") {
-            tg.close();
-        } else {
-            alert("Щось пішло не так!");
-        }
-    })
-    .catch(error => {
-        alert("Помилка при надсиланні!");
-        console.error(error);
-    });
-}
+    .then(async res => {
+          const result = await res.json();
+        
+          if (!res.ok) {
+            // Якщо відповідь з помилкою — покажи повідомлення
+            throw new Error(result.detail || result.error || "Невідома помилка");
+          }
+        
+          // Якщо все добре — закриваємо WebApp
+          tg.close();
+        })
+        .catch(error => {
+          alert(error.message);
+          console.error("Server error:", error);
+        });
+    }
 
 // Прив’язуємо кнопки до функцій
 document.getElementById("submit_episode").onclick = () => sendData("episode", "episode");
