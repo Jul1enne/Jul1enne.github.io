@@ -192,7 +192,7 @@ fetch("http://localhost:8000/anime")
                     const selectedSeasonNumber = parseInt(seasonSelect.value, 10);
                     const selectedSeason = selectedAnime.seasons.find(s => s.number === selectedSeasonNumber);
                     const partSelect = document.getElementById(`part_list_${prefix}`);
-                    partSelect.innerHTML = "<option value=''>Частина</option>";
+                    partSelect.innerHTML = "<option value=''></option>";
                     
                     if (selectedSeason && selectedSeason.chapters) {
                         selectedSeason.chapters.forEach(ch => {
