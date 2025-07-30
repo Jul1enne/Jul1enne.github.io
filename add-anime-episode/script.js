@@ -18,7 +18,10 @@ function collectFormData(prefix, type) {
     const translators = Array.from(document.querySelectorAll(`input[name="translators_${prefix}"]:checked`)).map(cb => cb.value);
 
     const animeSelect = document.getElementById(`anime_list_${prefix}`);
+    const seasonSelect = document.getElementById(`season_list_${prefix}`);
+
     const animeSelectedOption = animeSelect.selectedOptions[0];
+    const seasonSelectedOption = seasonSelect.selectedOptions[0];
 
     return {
         type,
@@ -26,8 +29,10 @@ function collectFormData(prefix, type) {
         name: document.getElementById(`anime_list_${prefix}`)?.value,
 
         anime_id: animeSelectedOption ? animeSelectedOption.getAttribute("data-id") : null,
-        season: document.getElementById(`season_list_${prefix}`)?.value,
-        part: document.getElementById(`part_list_${prefix}`)?.value || null,
+        season_id: seasonSelectedOption ? seasonSelectedOption.getAttribute("data-id") : null,
+        
+        season: seasonSelect.value,
+        //part: document.getElementById(`part_list_${prefix}`)?.value || null,
 
         episode: document.getElementById(`episode_num_${prefix}`)?.value,
         episode_title: document.getElementById(`episode_title_${prefix}`)?.value.trim(),
@@ -44,7 +49,7 @@ function collectFormData(prefix, type) {
         include_finished: document.getElementById(`include_finished_switch_${prefix}`)?.checked ?? false,
         include_sound: document.getElementById(`include_sound_switch_${prefix}`)?.checked ?? true,
         include_translator: document.getElementById(`include_translator_switch_${prefix}`)?.checked ?? true,
-        tag: document.getElementById(`anime_list_${prefix}`)?.value.trim(),
+        tag: selectedAnime.value.trim(),
     };
 }
 
@@ -175,7 +180,7 @@ fetch("http://localhost:8000/anime")
                 const selectedTag = animeSelect.value;
                 const selectedAnime = animeData.find(a => a.tag === selectedTag);
                 seasonSelect.innerHTML = "<option value=''></option>";
-                document.getElementById(`part_list_${prefix}`).innerHTML = "<option value=''></option>";
+                //document.getElementById(`part_list_${prefix}`).innerHTML = "<option value=''></option>";
 
                 if (!selectedAnime || !selectedAnime.seasons) return;
 
@@ -183,26 +188,27 @@ fetch("http://localhost:8000/anime")
                 selectedAnime.seasons.forEach(season => {
                     const opt = document.createElement("option");
                     opt.value = season.number;
-                    opt.textContent = `Сезон ${season.number}`;
+                    opt.textContent = `Сезон ${season.lable}`;
+                    opt.setAttribute("data-id", season.season_id);
                     seasonSelect.appendChild(opt);
                 });
               
                 // При зміні сезону — оновлюємо список частин
-                seasonSelect.addEventListener("change", () => {
-                    const selectedSeasonNumber = parseInt(seasonSelect.value, 10);
-                    const selectedSeason = selectedAnime.seasons.find(s => s.number === selectedSeasonNumber);
-                    const partSelect = document.getElementById(`part_list_${prefix}`);
-                    partSelect.innerHTML = "<option value=''></option>";
-                    
-                    if (selectedSeason && selectedSeason.chapters) {
-                        selectedSeason.chapters.forEach(ch => {
-                            const partOpt = document.createElement("option");
-                            partOpt.value = ch.number;
-                            partOpt.textContent = `Частина ${ch.number}`;
-                            partSelect.appendChild(partOpt);
-                        });
-                    }
-                });
+                //seasonSelect.addEventListener("change", () => {
+                //    const selectedSeasonNumber = parseInt(seasonSelect.value, 10);
+                //    const selectedSeason = selectedAnime.seasons.find(s => s.number === selectedSeasonNumber);
+                //    const partSelect = document.getElementById(`part_list_${prefix}`);
+                //    partSelect.innerHTML = "<option value=''></option>";
+                //    
+                //    if (selectedSeason && selectedSeason.chapters) {
+                //        selectedSeason.chapters.forEach(ch => {
+                //            const partOpt = document.createElement("option");
+                //            partOpt.value = ch.number;
+                //            partOpt.textContent = `Частина ${ch.number}`;
+                //            partSelect.appendChild(partOpt);
+                //        });
+                //    }
+                //});
             });
         });
     });
