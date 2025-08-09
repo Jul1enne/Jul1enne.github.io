@@ -39,6 +39,7 @@ html, body {
   height: auto;
   aspect-ratio: 2 / 3;
   border-radius: 10px;
+  object-fit: cover;
   margin-right: 12px;
 }
 
