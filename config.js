@@ -1,4 +1,4 @@
 
 const config = {
-  serverUrl: 'https://uvreleasebot-production.up.railway.app:8000'
+  serverUrl: 'https://uvreleasebot-production.up.railway.app'
 };
