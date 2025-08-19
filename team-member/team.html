@@ -298,13 +298,13 @@
       <div class="loading-card">Завантаження команди...</div>
     </div>
   </div>
-
+  <script src="../config.js"></script>
   <script>
     async function fetchTeam() {
       const loading = document.getElementById("loadingIndicator");
       loading.classList.remove("hidden");
       try {
-        const res = await fetch("http://localhost:8000/team-members");
+        const res = await fetch(`${config.serverUrl}/team-members`);
         if (!res.ok) throw new Error("Помилка запиту");
         return await res.json();
       } catch (err) {

@@ -377,7 +377,8 @@
     <a href="index.html" id="backToListBtn" class="back-btn">Список аніме</a>
     <div id="animeView">Завантаження...</div>
   </div>
-
+  
+  <script src="../config.js"></script>
   <script>
 
 
@@ -388,7 +389,7 @@
 
     async function loadAnime() {
       try {
-        const res = await fetch(`http://localhost:8000/anime_id/${id}`);
+        const res = await fetch(`${config.serverUrl}/anime_id/${id}`);
         if (!res.ok) {
           container.innerHTML = "<p>Аніме не знайдено</p>";
           return;
@@ -424,7 +425,7 @@
             <div class="details">${dropdown}</div>
             <div class="anime-summary">
               <div class="poster-container">
-                <img src="http://localhost:8000/poster/${activeItem.file_id}" class="poster" alt="Poster">
+                <img src="${config.serverUrl}/poster/${activeItem.file_id}" class="poster" alt="Poster">
                 <div class="anime-actions" id="animeActions">
                   ${renderButtons(activeItem.id)}
                 </div>
@@ -464,7 +465,7 @@
             <div class="details">${dropdown}</div>
             <div class="anime-summary">
               <div class="poster-container">
-                <img src="http://localhost:8000/poster/${activeItem.file_id}" class="poster" alt="Poster">
+                <img src="${config.serverUrl}/poster/${activeItem.file_id}" class="poster" alt="Poster">
                 <div class="anime-actions" id="animeActions">
                   ${renderButtons(activeItem.id)}
                 </div>
@@ -510,7 +511,7 @@
       const watchBtn = document.getElementById('watchBtn');
       const plannedBtn = document.getElementById('plannedBtn');
     
-      fetch(`http://localhost:8000/user_status/${userId}/${animeId}`)
+      fetch(`${config.serverUrl}/user_status/${userId}/${animeId}`)
         .then(res => res.json())
         .then(status => {
           if (status.watched) watchedBtn.classList.add('active');
@@ -524,7 +525,7 @@
     }
 
     function switchPart(animeId, partId, element) {
-      fetch(`http://localhost:8000/anime_id/${animeId}`)
+      fetch(`${config.serverUrl}/anime_id/${animeId}`)
         .then(res => res.json())
         .then(anime => {
           document.querySelectorAll('#seasonLinks a').forEach(a => a.classList.remove('active'));
@@ -560,7 +561,7 @@
       watchBtn.classList.toggle("active", watch);
       plannedBtn.classList.toggle("active", planned);
     
-      fetch("http://localhost:8000/user_anime_status", {
+      fetch(`${config.serverUrl}/user_anime_status`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

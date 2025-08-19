@@ -57,7 +57,7 @@ function collectFormData(prefix, type) {
 function sendData(prefix, type) {
     const data = collectFormData(prefix, type);
 
-    fetch("http://localhost:8000/submit_episode", {
+    fetch(`${config.serverUrl}/submit_episode`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
@@ -85,7 +85,7 @@ document.getElementById("submit_ova").onclick = () => sendData("ova", "ova");
 document.getElementById("submit_special").onclick = () => sendData("special", "special");
 
 // Завантаження даберів
-fetch("http://localhost:8000/voicers")
+fetch(`${config.serverUrl}/voicers`)
     .then(res => res.json())
     .then(voicers => {
         ["episode", "ova", "special"].forEach(prefix => {
@@ -112,7 +112,7 @@ fetch("http://localhost:8000/voicers")
     .catch(error => console.error("Voicers fetch error:", error));
 
 // Завантаження звукарів
-fetch("http://localhost:8000/sounds")
+fetch(`${config.serverUrl}/sounds`)
     .then(res => res.json())
     .then(voicers => {
         ["episode", "ova", "special"].forEach(prefix => {
@@ -136,7 +136,7 @@ fetch("http://localhost:8000/sounds")
     });
 
 // Завантаження звукарів
-fetch("http://localhost:8000/translators")
+fetch(`${config.serverUrl}/translators`)
     .then(res => res.json())
     .then(voicers => {
         ["episode", "ova", "special"].forEach(prefix => {
@@ -162,7 +162,7 @@ fetch("http://localhost:8000/translators")
 // Завантаження аніме та сезонів
 let animeData = [];
 
-fetch("http://localhost:8000/anime")
+fetch(`${config.serverUrl}/anime`)
     .then(res => res.json())
     .then(data => {
         animeData = data;

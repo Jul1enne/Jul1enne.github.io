@@ -14,7 +14,7 @@ document.getElementById('sendBtn').addEventListener('click', () => {
     return;
   }
 
-  fetch('http://localhost:8000/send-feedback', {
+  fetch(`${config.serverUrl}/send-feedback`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ anonymous, message, userId, username})

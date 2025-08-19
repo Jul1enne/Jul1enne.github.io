@@ -91,13 +91,13 @@
       Завантаження...
     </div>
   </div>
-
+  <script src="../config.js"></script>
   <script>
     const userId = new URLSearchParams(window.location.search).get("id");
 
     async function fetchUser(id) {
       try {
-        const res = await fetch(`http://localhost:8000/team-member/${id}`);
+        const res = await fetch(`${config.serverUrl}/team-member/${id}`);
         if (!res.ok) throw new Error("Не вдалося завантажити користувача");
         return await res.json();
       } catch (err) {
@@ -144,7 +144,7 @@
         roles[role] = !roles[role];
         updateUI();
 
-        await fetch(`http://localhost:8000/update-member-status`, {
+        await fetch(`${config.serverUrl}/update-member-status`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

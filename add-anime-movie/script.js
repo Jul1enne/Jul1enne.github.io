@@ -42,7 +42,7 @@ function sendMovie() {
         include_exist_official_dub: document.getElementById('include_exist_official_dub')?.checked ?? false,
     };
 
-    fetch("http://localhost:8000/submit_movie", {
+    fetch(`${config.serverUrl}/submit_movie`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
@@ -65,7 +65,7 @@ function sendMovie() {
     }
 
 // Завантажити список озвучувачів
-fetch("http://localhost:8000/voicers")
+fetch(`${config.serverUrl}/voicers`)
     .then(res => res.json())
     .then(voicers => {
         const voicedContainer = document.getElementById("voiced_by_container");
@@ -89,7 +89,7 @@ fetch("http://localhost:8000/voicers")
     });
 
 // Завантаження звукарів
-fetch("http://localhost:8000/sounds")
+fetch(`${config.serverUrl}/sounds`)
     .then(res => res.json())
     .then(sounders => {
         const soundContainer = document.getElementById("sound_by_container");
@@ -113,7 +113,7 @@ fetch("http://localhost:8000/sounds")
     });
 
 // Завантаження звукарів
-fetch("http://localhost:8000/translators")
+fetch(`${config.serverUrl}/translators`)
     .then(res => res.json())
     .then(translators => {
         const translatedContainer = document.getElementById(`translated_by_container`);

@@ -340,7 +340,7 @@
       </div>
     </div>
   </div>
-
+  <script src="../config.js"></script>
   <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
@@ -376,7 +376,7 @@
         tag: document.getElementById('title_tag')?.value.trim(),
       };
 
-      fetch("http://localhost:8000/submit_title", {
+      fetch(`${config.serverUrl}/submit_title`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
@@ -425,7 +425,7 @@
         tag: select?.value,
       };
 
-      fetch("http://localhost:8000/submit_seasone", {
+      fetch(`${config.serverUrl}/submit_seasone`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
@@ -478,7 +478,7 @@
         include_season_num: document.getElementById('chapter_include_season_num')?.checked ?? true,
       };
     
-      fetch("http://localhost:8000/submit_season_chapter", {
+      fetch(`${config.serverUrl}/submit_season_chapter`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
@@ -501,7 +501,7 @@
     }
 
     // Отримання списку аніме
-    fetch("http://localhost:8000/anime")
+    fetch(`${config.serverUrl}/anime`)
       .then(res => res.json())
       .then(data => {
         animeData = data;

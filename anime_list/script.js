@@ -54,10 +54,10 @@ async function fetchAnimeList() {
   const loadingElement = document.getElementById("loadingIndicator");
   loadingElement.classList.remove("hidden");
 
-  let url = "http://localhost:8000/anime_list";
-  if (filter === "watched") url = `http://localhost:8000/watched_anime_list?user_id=${userId}`;
-  else if (filter === "watch") url = `http://localhost:8000/watch_anime_list?user_id=${userId}`;
-  else if (filter === "planned") url = `http://localhost:8000/planned_anime_list?user_id=${userId}`;
+  let url = `${config.serverUrl}/anime_list`;
+  if (filter === "watched") url = `${config.serverUrl}/watched_anime_list?user_id=${userId}`;
+  else if (filter === "watch") url = `${config.serverUrl}/watch_anime_list?user_id=${userId}`;
+  else if (filter === "planned") url = `${config.serverUrl}/planned_anime_list?user_id=${userId}`;
 
   try {
     const response = await fetch(url);
@@ -113,7 +113,7 @@ async function renderAnimePage(page) {
     if (anime.type === "movie") {
       itemHTML = `
         <div class="anime-summary">
-          <img src="http://localhost:8000/poster/${anime.file_id}" class="poster" alt="Poster">
+          <img src="${config.serverUrl}/poster/${anime.file_id}" class="poster" alt="Poster">
           <div class="info">
             <div class="title">${anime.title}</div>
             <div class="subtitle">${anime.title_en}</div>
@@ -130,7 +130,7 @@ async function renderAnimePage(page) {
     } else if (anime.type === "series") {
       itemHTML = `
         <div class="anime-summary">
-          <img src="http://localhost:8000/poster/${anime.file_id}" class="poster" alt="Poster">
+          <img src="${config.serverUrl}/poster/${anime.file_id}" class="poster" alt="Poster">
           <div class="info">
             ${badgeHTML}
             <div class="title">${anime.title}</div>
