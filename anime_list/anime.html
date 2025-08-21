@@ -385,8 +385,7 @@
   
   <script src="../config.js"></script>
   <script>
-    const tg = window.Telegram.WebApp;
-    tg.expand();
+    
 
     const container = document.getElementById('animeView');
     const urlParams = new URLSearchParams(window.location.search);
@@ -458,7 +457,7 @@
                 : `<div class="dropdown">
                      <div class="dropdown-header" onclick="this.parentNode.classList.toggle('open')">Серії</div>
                      <div class="dropdown-content" id="episodes">
-                       ${activeItem.episodeLinks.map(e => `<a href="${e.url}" class="episode-link">${e.title}</a>`).join('')}
+                       ${activeItem.episodeLinks.map(e => `<a href="${e.url}">${e.title}</a>`).join('')}
                      </div>
                    </div>`
               }
@@ -493,7 +492,7 @@
                 ? `<div class="official-dub-title">
                      ${activeItem.exist_official_dub_title}
                    </div>`
-                : `<a href="${activeItem.episodeLink}" class="episode-link">Дивитися</a>`
+                : `<a href="${activeItem.episodeLink}" class="back-btn">Дивитися</a>`
               }
             </div>
           </div>
@@ -502,12 +501,6 @@
     
       container.innerHTML = content;
       attachButtonEvents(activeItem.id);
-
-      document.querySelectorAll(".episode-link").forEach(link => {
-        link.addEventListener("click", () => {
-          tg.close();
-        });
-      });
     }
 
     function renderButtons(animeId) {
