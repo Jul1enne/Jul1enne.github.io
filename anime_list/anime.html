@@ -84,39 +84,74 @@
       padding: 12px;
       border-top: 1px solid #3a3a3c;
     }
+
     .dropdown {
       background-color: #343436;
       border-radius: 10px;
       margin-top: 12px;
       overflow: hidden;
     }
+
     .dropdown-header {
       padding: 14px;
       cursor: pointer;
       font-weight: bold;
       background-color: #3a3a3c;
     }
+
     .dropdown-content {
       display: flex;
       flex-wrap: wrap;
       padding: 10px;
       gap: 8px;
     }
+
     .dropdown.open .dropdown-content {
       display: flex;
     }
-    .dropdown-content a {
+
+    .dropdown-content.series {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 8px;
+      padding: 10px;
+    }
+
+    /* Серії: ширина під текст, не розтягуються */
+    .dropdown-content.series a {
       background-color: #588273;
-      text-decoration: none;    
+      text-decoration: none;
       color: white;
       border-radius: 8px;
-      padding: 8px 0; /* залишаємо вертикальний padding, горизонтальний прибираємо */
+      padding: 8px 14px; /* вертикальний + горизонтальний padding */
       font-size: 16px;
       -webkit-tap-highlight-color: transparent;
-
-      flex: 1 1 calc(25% - 8px); /* кожна кнопка займає ~25% ширини рядка мінус gap */
+      flex: 0 0 auto; /* ширина по контенту */
       text-align: center;
-      box-sizing: border-box; /* щоб padding не ламав ширину */
+      box-sizing: border-box;
+    }
+
+    /* Хронологія: гнучкі кнопки з переносом на рядок */
+    .dropdown-content.chronology {
+      display: flex;
+      flex-wrap: wrap;       /* дозволяє переносити кнопки на новий рядок */
+      gap: 8px;              /* відстань між кнопками */
+    }
+    
+    .dropdown-content.chronology a {
+      background-color: #588273;
+      text-decoration: none;
+      color: white;
+      border-radius: 8px;
+      padding: 8px 12px;      /* вертикальний + горизонтальний padding */
+      font-size: 16px;
+      -webkit-tap-highlight-color: transparent;
+    
+      flex: 1 1 auto;         /* гнучка ширина по контенту */
+      min-width: 100px;       /* мінімальна ширина, щоб кнопки не були надто вузькими */
+      max-width: 100%;        /* не виходять за межі контейнера */
+      text-align: center;
+      box-sizing: border-box;
     }
 
     .dropdown-content a.active {
@@ -202,175 +237,97 @@
 
     /* До 540px */
     @media (max-width: 540px) {
-      html, body {
-        font-size: 15px;
-      }
-      .title {
-        font-size: 22px;
-      }
-      .description {
-        font-size: 14px;
-      }
-      .dropdown-content a {
-        font-size: 14px;
-        padding: 6px 12px;
-        border-radius: 8px;
-      }
-      .dropdown-header {
-        font-size: 15px;
-      }
-      .action-btn {
-        font-size: 14px;
-        padding: 9px 14px;  /* трохи більше padding для кнопки */
-        border-radius: 9px; /* трохи менше заокруглення */
-      }
-      .back-btn {
-        font-size: 15px;    /* збільшено */
-        padding: 12px 18px; /* збільшено */
-        border-radius: 9px;
-      }
-      .subtitle,
-      .badge,
-      .official-dub-title {
-        font-size: 13px;
-      }
-      .meta,
-      .meta-block {
-        font-size: 14px;
-      }
-      .poster-container {
-        width: 28%;
-      }
-    }
+      html, body { font-size: 15px; }
+      .title { font-size: 22px; }
+      .description { font-size: 14px; }
+      .dropdown-header { font-size: 15px; }
     
+      .dropdown-content.series {
+        gap: 6px;
+      }
+      .dropdown-content.series a {
+        font-size: 14px;
+        padding: 6px 0;
+        border-radius: 8px;
+        flex: 1 1 calc(25% - 6px);
+      }
+    
+      .dropdown-content.chronology a {
+        font-size: 14px;
+        padding: 6px 10px;
+      }
+    
+      .action-btn { font-size: 14px; padding: 9px 14px; border-radius: 9px; }
+      .back-btn { font-size: 15px; padding: 12px 18px; border-radius: 9px; }
+      .subtitle, .badge, .official-dub-title { font-size: 13px; }
+      .meta, .meta-block { font-size: 14px; }
+      .poster-container { width: 28%; }
+    }
+
     /* До 480px */
     @media (max-width: 480px) {
-      html, body {
-        font-size: 14px;
-      }
-      .title {
-        font-size: 20px;
-      }
-      .description {
-        font-size: 13px;
-      }
-      .dropdown-content a {
-        font-size: 13px;
-        padding: 6px 10px;
-        border-radius: 7px;
-      }
-      .dropdown-header {
-        font-size: 14px;
-      }
-      .action-btn {
-        font-size: 13px;
-        padding: 8px 12px;  /* трохи збільшено */
-        border-radius: 8px;
-      }
-      .back-btn {
-        font-size: 14px;   
-        padding: 11px 16px; /* збільшено */
-        border-radius: 8px;
-      }
-      .subtitle,
-      .badge,
-      .official-dub-title {
-        font-size: 12px;
-      }
-      .meta,
-      .meta-block {
-        font-size: 13px;
-      }
-      .poster-container {
-        width: 30%;
-      }
-    }
+      html, body { font-size: 14px; }
+      .title { font-size: 20px; }
+      .description { font-size: 13px; }
+      .dropdown-header { font-size: 14px; }
     
+      .dropdown-content.series a {
+        font-size: 13px;
+        padding: 6px 0;
+        flex: 1 1 calc(33% - 6px);
+      }
+    
+      .dropdown-content.chronology a { font-size: 13px; padding: 6px 8px; }
+    
+      .action-btn { font-size: 13px; padding: 8px 12px; border-radius: 8px; }
+      .back-btn { font-size: 14px; padding: 11px 16px; border-radius: 8px; }
+      .subtitle, .badge, .official-dub-title { font-size: 12px; }
+      .meta, .meta-block { font-size: 13px; }
+      .poster-container { width: 30%; }
+    }
+
     /* До 420px */
     @media (max-width: 420px) {
-      html, body {
-        font-size: 13px;
-      }
-      .title {
-        font-size: 18px;
-      }
-      .description {
-        font-size: 12px;
-      }
-      .dropdown-content a {
-        font-size: 12px;
-        padding: 5px 8px;
-        border-radius: 7px;
-      }
-      .dropdown-header {
-        font-size: 13px;
-      }
-      .action-btn {
-        font-size: 12px;
-        padding: 7px 10px;  /* збільшено */
-        border-radius: 7px;
-      }
-      .back-btn {
-        font-size: 13px;
-        padding: 10px 14px; /* збільшено */
-        border-radius: 7px;
-      }
-      .subtitle,
-      .badge,
-      .official-dub-title {
-        font-size: 11px;
-      }
-      .meta,
-      .meta-block {
-        font-size: 12px;
-      }
-      .poster-container {
-        width: 35%;
-      }
-    }
+      html, body { font-size: 13px; }
+      .title { font-size: 18px; }
+      .description { font-size: 12px; }
+      .dropdown-header { font-size: 13px; }
     
+      .dropdown-content.series a {
+        font-size: 12px;
+        padding: 5px 0;
+        flex: 1 1 calc(50% - 6px);
+      }
+    
+      .dropdown-content.chronology a { font-size: 12px; padding: 5px 7px; }
+    
+      .action-btn { font-size: 12px; padding: 7px 10px; border-radius: 7px; }
+      .back-btn { font-size: 13px; padding: 10px 14px; border-radius: 7px; }
+      .subtitle, .badge, .official-dub-title { font-size: 11px; }
+      .meta, .meta-block { font-size: 12px; }
+      .poster-container { width: 35%; }
+    }
+
     /* До 380px */
     @media (max-width: 380px) {
-      html, body {
-        font-size: 12px;
-      }
-      .title {
-        font-size: 16px;
-      }
-      .description {
+      html, body { font-size: 12px; }
+      .title { font-size: 16px; }
+      .description { font-size: 11px; }
+      .dropdown-header { font-size: 12px; }
+    
+      .dropdown-content.series a {
         font-size: 11px;
+        padding: 5px 0;
+        flex: 1 1 calc(50% - 4px);
       }
-      .dropdown-content a {
-        font-size: 11px;
-        padding: 5px 7px;
-        border-radius: 6px;
-        flex: 1 1 calc(33% - 8px);
-      }
-      .dropdown-header {
-        font-size: 12px;
-      }
-      .action-btn {
-        font-size: 11px;
-        padding: 6px 9px;  /* збільшено */
-        border-radius: 6px;
-      }
-      .back-btn {
-        font-size: 12px;
-        padding: 9px 13px;  /* збільшено */
-        border-radius: 6px;
-      }
-      .subtitle,
-      .badge,
-      .official-dub-title {
-        font-size: 10px;
-      }
-      .meta,
-      .meta-block {
-        font-size: 11px;
-      }
-      .poster-container {
-        width: 38%;
-      }
+    
+      .dropdown-content.chronology a { font-size: 11px; padding: 4px 6px; }
+    
+      .action-btn { font-size: 11px; padding: 6px 9px; border-radius: 6px; }
+      .back-btn { font-size: 12px; padding: 9px 13px; border-radius: 6px; }
+      .subtitle, .badge, .official-dub-title { font-size: 10px; }
+      .meta, .meta-block { font-size: 11px; }
+      .poster-container { width: 38%; }
     }
 
 
@@ -420,7 +377,7 @@
       const dropdown = `
         <div class="dropdown">
           <div class="dropdown-header" onclick="this.parentNode.classList.toggle('open')">Хронологія</div>
-          <div class="dropdown-content" id="seasonLinks">${buttonsHTML}</div>
+          <div class="dropdown-content chronology" id="seasonLinks">${buttonsHTML}</div>
         </div>
       `;
       
@@ -456,8 +413,8 @@
                    </div>`
                 : `<div class="dropdown">
                      <div class="dropdown-header" onclick="this.parentNode.classList.toggle('open')">Серії</div>
-                     <div class="dropdown-content" id="episodes">
-                       ${activeItem.episodeLinks.map(e => `<a href="${e.url}">${e.title}</a>`).join('')}
+                     <div class="dropdown-content series" id="episodes">
+                       ${activeItem.episodeLinks.map(e => `<a href="${e.url}" class="episode-link">${e.title}</a>`).join('')}
                      </div>
                    </div>`
               }
