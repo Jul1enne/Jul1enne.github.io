@@ -110,9 +110,13 @@
       text-decoration: none;    
       color: white;
       border-radius: 8px;
-      padding: 8px 14px;
+      padding: 8px 0; /* залишаємо вертикальний padding, горизонтальний прибираємо */
       font-size: 16px;
-      -webkit-tap-highlight-color: transparent; /* щоб не було синього підсвічування на мобільних */
+      -webkit-tap-highlight-color: transparent;
+
+      flex: 1 1 calc(25% - 8px); /* кожна кнопка займає ~25% ширини рядка мінус gap */
+      text-align: center;
+      box-sizing: border-box; /* щоб padding не ламав ширину */
     }
 
     .dropdown-content a.active {
@@ -340,6 +344,7 @@
         font-size: 11px;
         padding: 5px 7px;
         border-radius: 6px;
+        flex: 1 1 calc(33% - 8px);
       }
       .dropdown-header {
         font-size: 12px;
